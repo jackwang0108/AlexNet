@@ -7,6 +7,7 @@ from dataclasses import dataclass
 # Third-Party Library
 import torch
 import numpy as np
+import pandas as pd
 import PIL.Image as Image
 import matplotlib.pyplot as plt
 from colorama import Fore, Style, init
@@ -108,6 +109,49 @@ class ClassLabelLookuper:
 
     def get_label(self, cls: str) -> int:
         return self._cls2label[cls]
+
+
+class ClassificationEvaluator:
+    def __init__(self, dataset: str):
+        self._ccn: ClassLabelLookuper = ClassLabelLookuper(datasets=dataset)
+        self.ds = dataset
+        self.cls: List[str] = self._ccn.cls
+        self.confusion_top1 = np.zeros(shape=(len(self.cls), ) * 2, dtype=int)
+        self.confusion_top5 = np.zeros(shape=(len(self.cls), ) * 2, dtype=int)
+
+    def __check(self, top: int):
+        assert top in [1, 5], f"{Fore.RED}Wrong top-k, can only be top 1 or top 5"
+
+    def get_confusion(self, top: Optional[int] = 1, title: Optional[str] = None) -> Union[str, pd.DataFrame]:
+        self.__check(top)
+        confusion_matrix = getattr(self, f"confusion_top{top}")
+        df = pd.DataFrame(confusion_matrix, index=self.cls, columns=self.cls)
+        df.index.name = "gt"
+        df.columns.name = "pred"
+        try:
+            no_tbs = False
+            from terminaltables import AsciiTable
+            ll = df.reset_index().T.reset_index().T.values.tolist()
+            ll[0][0] = u"gt\u21A1 |pred\u21A0 "
+            table = AsciiTable(ll)
+            for i in range(len(self.cls)+1):
+                table.justify_columns[i] = "center"
+            if table.ok:
+                table = str(table.table).split("\n")
+                len_row = len(table[0])
+                c = f"Top {top} Confusion Matrix of dataset {self.ds}" if title is None else title
+                table[0] = "+" + c.center(len_row - 2, "-") + "+"
+                t = "\n".join(table)
+                return t
+        except ModuleNotFoundError:
+            s1 = f"{Fore.YELLOW}terminaltables not found, print with pd. " \
+                f"If you want prettier output, please install terminaltables"
+            no_tbs = True
+        s2 = f"{Fore.YELLOW}Terminal table break detected, print with pd"
+        pd.options.display.max_columns = len(self.cls)
+        pd.options.display.max_rows = len(self.cls)
+        print(s1 if no_tbs else s2)
+        return df
 
 
 ImageType = TypeVar(
@@ -298,6 +342,11 @@ if __name__ == "__main__":
     # a = visualize_np(images[0: length + 1], [ccn.get_class(i) for i in labels[0: length + 1]])
     # print(a.shape)
 
-    def rand_shape(): return (np.random.randint(100, 256), np.random.randint(100, 256))
-    image = [np.random.randint(low=0, high=256, size=(*rand_shape(), 3), dtype=int) for i in range(64)]
-    visualize_plt(image)
+    # def rand_shape(): return (np.random.randint(100, 256), np.random.randint(100, 256))
+    # image = [np.random.randint(low=0, high=256, size=(*rand_shape(), 3), dtype=int) for i in range(64)]
+    # visualize_plt(image)
+
+    ce = ClassificationEvaluator(dataset="PascalVOC2012")
+    ce.confusion_top1 += 10
+    a = ce.get_confusion()
+    print(a)
