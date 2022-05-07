@@ -46,38 +46,39 @@ class DatasetPath:
 
     class PascalVOC2012:
         base: Path = ProjectPath.base.joinpath("dataset/PascalVOC2012")
+        JPEGImages: Path = base.joinpath("JPEGImages")
 
-        _train_class_idx: List[Path] = base.joinpath("ImageSets", "Main").glob(r"*_train.txt")
-        _val_class_idx: List[Path] = base.joinpath("ImageSets", "Main").glob(r"*_val.txt")
+        _train_class_idx: List[Path] = list(base.joinpath("ImageSets", "Main").glob(r"*_train.txt"))
+        _val_class_idx: List[Path] = list(base.joinpath("ImageSets", "Main").glob(r"*_val.txt"))
 
         # get train
         train_idx: Dict[str, List[Path]] = {}
-        for path in _train_class_idx:
-            cls = path.stem.split("_")[0]
-            train_idx[cls] = []
-            with path.open(mode="r") as f:
-                c = f.readlines()
-            for line in c:
+        for _path in _train_class_idx:
+            _cls = _path.stem.split("_")[0]
+            train_idx[_cls] = []
+            with _path.open(mode="r") as _f:
+                _c = _f.readlines()
+            for _line in _c:
                 # train_idx[cls].
-                if line[-3:-1] == "-1":
+                if _line[-3:-1] == "-1":
                     continue
-                train_idx[cls].append(
-                    base.joinpath("JEPGImages", f"{line.split(' ')[0]}.jpg")
+                train_idx[_cls].append(
+                    base.joinpath("JEPGImages", f"{_line.split(' ')[0]}.jpg")
                 )
 
         # get validation
         val_idx: Dict[str, List[Path]] = {}
-        for path in _val_class_idx:
-            cls = path.stem.split("_")[0]
-            val_idx[cls] = []
-            with path.open(mode="r") as f:
-                c = f.readlines()
-            for line in c:
+        for _path in _val_class_idx:
+            _cls = _path.stem.split("_")[0]
+            val_idx[_cls] = []
+            with _path.open(mode="r") as _f:
+                _c = _f.readlines()
+            for _line in _c:
                 # train_idx[cls].
-                if line[-3:-1] == "-1":
+                if _line[-3:-1] == "-1":
                     continue
-                val_idx[cls].append(
-                    base.joinpath("JEPGImages", f"{line.split(' ')[0]}.jpg")
+                val_idx[_cls].append(
+                    base.joinpath("JEPGImages", f"{_line.split(' ')[0]}.jpg")
                 )
 
 
@@ -145,7 +146,7 @@ class ClassificationEvaluator:
                 return t
         except ModuleNotFoundError:
             s1 = f"{Fore.YELLOW}terminaltables not found, print with pd. " \
-                f"If you want prettier output, please install terminaltables"
+                 f"If you want prettier output, please install terminaltables"
             no_tbs = True
         s2 = f"{Fore.YELLOW}Terminal table break detected, print with pd"
         pd.options.display.max_columns = len(self.cls)
