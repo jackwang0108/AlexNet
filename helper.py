@@ -51,35 +51,33 @@ class DatasetPath:
         _train_class_idx: List[Path] = list(base.joinpath("ImageSets", "Main").glob(r"*_train.txt"))
         _val_class_idx: List[Path] = list(base.joinpath("ImageSets", "Main").glob(r"*_val.txt"))
 
+        # Attention: 同一个图像是存在多个标签的, 后续需要去重复
         # get train
         train_idx: Dict[str, List[Path]] = {}
+        _seen_img = np.array(["-1"], dtype=str)
         for _path in _train_class_idx:
             _cls = _path.stem.split("_")[0]
-            train_idx[_cls] = []
-            with _path.open(mode="r") as _f:
-                _c = _f.readlines()
-            for _line in _c:
-                # train_idx[cls].
-                if _line[-3:-1] == "-1":
-                    continue
-                train_idx[_cls].append(
-                    base.joinpath("JEPGImages", f"{_line.split(' ')[0]}.jpg")
+            _data = np.loadtxt(_path, dtype=str)
+            _mask = np.where(_data == "1")[0]
+            train_idx[_cls] = np.apply_along_axis(
+                arr=_data[_mask], axis=1,
+                func1d=lambda x: ProjectPath.base.joinpath(
+                    "dataset", "PascalVOC2012", "JEPGImages", f"{x[0]}.jpg"
                 )
+            ).tolist()
 
         # get validation
         val_idx: Dict[str, List[Path]] = {}
         for _path in _val_class_idx:
             _cls = _path.stem.split("_")[0]
-            val_idx[_cls] = []
-            with _path.open(mode="r") as _f:
-                _c = _f.readlines()
-            for _line in _c:
-                # train_idx[cls].
-                if _line[-3:-1] == "-1":
-                    continue
-                val_idx[_cls].append(
-                    base.joinpath("JEPGImages", f"{_line.split(' ')[0]}.jpg")
+            _data = np.loadtxt(_path, dtype=str)
+            _mask = np.where(_data == "1")[0]
+            val_idx[_cls] = np.apply_along_axis(
+                arr=_data[_mask], axis=1,
+                func1d=lambda x: ProjectPath.base.joinpath(
+                    "dataset", "PascalVOC2012", "JEPGImages", f"{x[0]}.jpg"
                 )
+            ).tolist()
 
 
 class ClassLabelLookuper:
@@ -117,8 +115,8 @@ class ClassificationEvaluator:
         self._ccn: ClassLabelLookuper = ClassLabelLookuper(datasets=dataset)
         self.ds = dataset
         self.cls: List[str] = self._ccn.cls
-        self.confusion_top1 = np.zeros(shape=(len(self.cls), ) * 2, dtype=int)
-        self.confusion_top5 = np.zeros(shape=(len(self.cls), ) * 2, dtype=int)
+        self.confusion_top1 = np.zeros(shape=(len(self.cls),) * 2, dtype=int)
+        self.confusion_top5 = np.zeros(shape=(len(self.cls),) * 2, dtype=int)
 
     def __check(self, top: int):
         assert top in [1, 5], f"{Fore.RED}Wrong top-k, can only be top 1 or top 5"
@@ -135,7 +133,7 @@ class ClassificationEvaluator:
             ll = df.reset_index().T.reset_index().T.values.tolist()
             ll[0][0] = u"gt\u21A1 |pred\u21A0 "
             table = AsciiTable(ll)
-            for i in range(len(self.cls)+1):
+            for i in range(len(self.cls) + 1):
                 table.justify_columns[i] = "center"
             if table.ok:
                 table = str(table.table).split("\n")
