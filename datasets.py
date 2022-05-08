@@ -1,3 +1,6 @@
+# * 心得:
+#           1. 如果要用torchvision，最好转为Image, 不然容易出错
+
 # Standard Library
 import pickle
 from typing import *
@@ -11,6 +14,7 @@ from colorama import Fore, init
 # Torch Library
 import torch
 import torch.utils.data as data
+import torchvision.transforms as T
 
 # My Library
 from helper import visualize_np, visualize_plt, visualize_pil
@@ -36,22 +40,32 @@ class MultiDataset(data.Dataset):
         assert split in (s := ["train", "val", "test"]), f"{Fore.RED}Invalid split, s"
         self.split = split
         self.dataset = dataset
-        self._dataset_reader: [str, Callable] = {
+        self._dataset_reader: Dict[str, Callable] = {
             "Cifar10": self.__read_cifar10,
             "Cifar100": self.__read_cifar100,
             "PascalVOC2012": self.__read_PascalVOC2012
         }
         assert dataset in self._dataset_reader.keys(), f"{Fore.RED}Invalid dataset, please select in " \
                                                        f"{self._dataset_reader.keys()}."
-        self.image: Union[np.ndarray, List[np.ndarray]]
+        self.image: Union[np.ndarray, List[Path]]
         self.label: np.ndarray
         self.image, self.label = self._dataset_reader[self.dataset]()
 
-    def __len__(self):
-        raise NotImplementedError
 
-    def __getitem__(self, item):
-        raise NotImplementedError
+    def __len__(self) -> int:
+        return len(self.image)
+
+    def __getitem__(self, idx) -> Tuple[torch.Tensor, torch.Tensor]:
+        image, label = self.image[idx], self.label[idx]
+        if isinstance(image, Path):
+            image = Image.open(image)
+        else:
+            image = Image.fromarray(image.astype(np.uint8)).convert("RGB")
+        return self.transform(image), label
+    
+    def set_transform(self, transform: T.Compose):
+        self.transform = transform
+
 
     def __read_cifar10(self) -> Tuple[np.ndarray, np.ndarray]:
         if self.split in ["train", "val"]:
@@ -66,7 +80,7 @@ class MultiDataset(data.Dataset):
                 data = pickle.load(f, encoding="bytes")
             image = data[b"data"].reshape(-1, 3, 32, 32)
             label = data[b"labels"]
-        return image, np.array(label)
+        return image.transpose(0, 2, 3, 1), np.array(label)
 
     def __read_cifar100(self) -> Tuple[np.ndarray, np.ndarray]:
         if self.split in ["train", "val"]:
@@ -79,7 +93,7 @@ class MultiDataset(data.Dataset):
                 data = pickle.load(f, encoding="bytes")
             image = data["data"].reshape(-1, 3, 32, 32)
             label = data["label"]
-        return image, np.asarray(label)
+        return image.transpose(0, 2, 3, 1), np.asarray(label)
 
     def __read_PascalVOC2012(self) -> Tuple[List[Path], np.ndarray]:
         image = []
@@ -99,5 +113,24 @@ class MultiDataset(data.Dataset):
         return image, np.array(label)[idx]
 
 if __name__ == "__main__":
-    md = MultiDataset(dataset="PascalVOC2012", split="train")
-    print("Done")
+    # md = MultiDataset(dataset="PascalVOC2012", split="train")
+    # tt = T.Compose([
+    #     T.RandomHorizontalFlip(),
+    #     T.Resize((224, 224)),
+    #     T.ToTensor()
+    # ])
+    # md.set_transform(tt)
+
+    md = MultiDataset(dataset="Cifar100", split="train")
+    tt = T.Compose([
+        T.RandomHorizontalFlip(),
+        T.ToTensor()
+    ])
+    md.set_transform(tt)
+
+    dl = data.DataLoader(md, batch_size=64)
+    for x, y in dl:
+        print(x.shape)
+        visualize_pil(x).show()
+        break
+

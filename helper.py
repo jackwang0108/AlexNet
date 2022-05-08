@@ -62,7 +62,7 @@ class DatasetPath:
             train_idx[_cls] = np.apply_along_axis(
                 arr=_data[_mask], axis=1,
                 func1d=lambda x: ProjectPath.base.joinpath(
-                    "dataset", "PascalVOC2012", "JEPGImages", f"{x[0]}.jpg"
+                    "dataset", "PascalVOC2012", "JPEGImages", f"{x[0]}.jpg"
                 )
             ).tolist()
 
@@ -75,7 +75,7 @@ class DatasetPath:
             val_idx[_cls] = np.apply_along_axis(
                 arr=_data[_mask], axis=1,
                 func1d=lambda x: ProjectPath.base.joinpath(
-                    "dataset", "PascalVOC2012", "JEPGImages", f"{x[0]}.jpg"
+                    "dataset", "PascalVOC2012", "JPEGImages", f"{x[0]}.jpg"
                 )
             ).tolist()
 
