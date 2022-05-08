@@ -84,17 +84,19 @@ class MultiDataset(data.Dataset):
     def __read_PascalVOC2012(self) -> Tuple[List[Path], np.ndarray]:
         image = []
         label = []
+        ccn = ClassLabelLookuper(datasets="PascalVOC2012")
         if self.split in "train":
             for k, v in DatasetPath.PascalVOC2012.train_idx.items():
                 image.extend(v)
-                label.extend([k] * len(v))
+                label.extend([ccn.get_label(k)] * len(v))
         elif self.split == "val":
             for k, v in DatasetPath.PascalVOC2012.val_idx.items():
                 image.extend(v)
-                label.extend([k] * len(v))
+                label.extend([ccn.get_label(k)] * len(v))
         else:
             assert False, f"{Fore.RED}PascalVOC2012 test data is not accesibly"
-        return image, np.array(label)
+        image, idx = np.unique(image, return_index=True)
+        return image, np.array(label)[idx]
 
 if __name__ == "__main__":
     md = MultiDataset(dataset="PascalVOC2012", split="train")
