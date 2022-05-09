@@ -277,9 +277,142 @@ class Trainer:
 
 
     def paper_train(
-        self, 
+        self,
+        n_epoch: Optional[int] = 200,
+        early_stop: Optional[int] = 30,
+        message: Optional[str] = None
     ) -> AlexNet:
-        pass
+        # log training digest
+        self.logger.info("Start Training".center(200, "+"))
+        self.logger.info(f"Training Digest: {message}")
+        self.logger.info(f"AlexNet training with paper setup")
+        self.logger.info(f"e_poech: {n_epoch}")
+        self.logger.info(f"early_stop: {early_stop}")
+        self.logger.info(f"datasets: {self.train_ds.dataset}")
+        
+
+        # detect anomaly
+        torch.autograd.set_detect_anomaly(True)
+
+        # train widgets
+        train_evaluator = ClassificationEvaluator(dataset=self.train_ds.dataset)
+        val_evaluator = ClassificationEvaluator(dataset=self.val_ds.dataset)
+        train_loader = data.DataLoader(
+            self.train_ds, batch_size=128, shuffle=True, num_workers=self.num_worker,
+            pin_memory=True
+        )
+        val_loader = data.DataLoader(
+            self.val_ds, batch_size=128, shuffle=False, num_workers=self.num_worker,
+            pin_memory=True
+        )
+        loss_func = nn.CrossEntropyLoss()
+        optimizer = optim.SGD(params=self.network.parameters(), lr=0.01, weight_decay=5e-4, momentum=0.9)
+        optimizer.zero_grad()
+
+        # constant
+        max_top1: float = 0
+        before_stop: int = 3
+        early_stop_cnt: int = 0
+        ne_digits: int = len(str(n_epoch))
+        es_digits: int = len(str(early_stop))
+
+        # typing
+        x: torch.Tensor
+        y: torch.Tensor
+        loss: torch.Tensor
+
+        # train network
+        for epoch in range(n_epoch):
+            # setup evaluator
+            train_evaluator.new_epoch()
+            val_evaluator.new_epoch()
+
+            # train
+            self.network.train()
+            for step, (x, y) in enumerate(train_loader):
+                x = x.to(device=self.avaliable_device, dtype=self.default_dtype, non_blocking=True)
+                y = y.to(device=self.avaliable_device, dtype=torch.long)
+
+                # inference
+                y_pred = self.network(x)
+
+                # gradient descent
+                loss = loss_func(y_pred, y)
+                loss.backward()
+                optimizer.step()
+                optimizer.zero_grad()
+
+                # log
+                if self.log and (self.log_loss_step is not None and step % self.log_loss_step == 0):
+                    self.logger.info(f"{Fore.GREEN}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}d}|{n_epoch}], step: {step}, loss: {loss:>.5f}")
+                if not self.dry_run:
+                    if step % self.log_loss_step == 0:
+                        self.writer.add_scalar(tag="train-loss", scalar_value=loss.cpu().item(), global_step=step + len(train_loader) * epoch)
+                train_evaluator.record(y_pred=y_pred, y=y)
+
+            # val
+            self.network.eval()
+            with torch.no_grad():
+                for step, (x, y) in enumerate(val_loader):
+                    x = x.to(device=self.avaliable_device, dtype=self.default_dtype, non_blocking=True)
+                    y = y.to(device=self.avaliable_device, dtype=torch.long)
+
+                    # inference
+                    y_pred = self.network(x)
+
+                    # log
+                    val_evaluator.record(y_pred=y_pred, y=y)
+            
+            # early stop
+            new_acc = val_evaluator.acc
+            if max_top1 <= new_acc[0]:
+                early_stop_cnt = 0
+                max_top1 = new_acc[0]
+                self.logger.info(
+                    f"{Fore.BLUE}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
+                    f"new top1 Acc: {new_acc[0]:>.5f}, top5 Acc:{new_acc[1]:>.5f}"
+                )
+                if not self.dry_run:
+                    torch.save(self.network.state_dict(), self.checkpoint_path)
+                    self.logger.info(
+                        f"{Fore.MAGENTA}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
+                        f"save checkpoint to {self.checkpoint_path.relative_to(ProjectPath.base)}"
+                    )
+            else:
+                early_stop_cnt += 1
+                self.logger.info(
+                    f"{Fore.BLUE}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
+                    f"top1 Acc: [{new_acc[0]:>5f}|{max_top1:>.5f}], top5 Acc: [{new_acc[1]:>5f}] early_stop_cnt: [{early_stop_cnt:>{es_digits}d}|{early_stop}]"
+                )
+
+            # adjust lr as said in paper
+            if early_stop_cnt >= int(early_stop * 2/3) and before_stop > 0:
+                before_stop -= 1
+                early_stop_cnt = 0
+                for param_group in optimizer.param_groups:
+                    param_group["lr"] /= 10
+
+            # tensorboard
+            if not self.dry_run:
+                self.writer.add_scalars(
+                    main_tag=f"Train Accuracy",
+                    tag_scalar_dict={
+                        "mAcc-top1": new_acc[0],
+                        "mAcc-top5": new_acc[1],
+                        "max-mAcc-top1": max_top1
+                    },
+                    global_step=epoch
+                )
+            
+            # print confusion matrix
+            if self.log_confusion_epoch is not None and epoch % self.log_confusion_epoch == 0:
+                table = val_evaluator.get_confusion(top=5, title=f"Top 5 Confusion Matrix of dataset {self.dataset}")
+                if self.log:
+                    self.logger.info(str(table))
+                else:
+                    print(table)
+
+        return self.network
 
 def parse_arg() -> argparse.Namespace:
     def green(s): return f"{Fore.GREEN}{s}{Style.RESET_ALL}"
@@ -291,6 +424,7 @@ def parse_arg() -> argparse.Namespace:
     parser.add_argument("-d", "--dry_run", dest="dry_run", default=False, action="store_true", help=green("If run without saving tensorboard amd network params to runs and checkpoints"))
     parser.add_argument("-l", "--log", dest="log", default=False, action="store_true", help=green("If save terminal output to log"))
     parser.add_argument("-c", "--cifar", dest="cifar", default=False, action="store_true", help=green("If use cifar modified network"))
+    parser.add_argument("-p", "--paper", dest="paper", default=False, action="store_true", help=green("If train the network using paper setting"))
     parser.add_argument("-ne", "--n_epoch", dest="n_epoch", type=int, default=250, help=yellow("Set maximum training epoch of each task"))
     parser.add_argument("-es", "--early_stop", dest="early_stop", type=int, default=40, help=yellow("Set maximum early stop epoch counts"))
     parser.add_argument("-lls", "--log_loss_step", dest="log_loss_step", type=int, default=100, help=yellow("Set log loss steps"))
@@ -308,6 +442,7 @@ if __name__ == "__main__":
     log: bool = args.log
     dry_run: bool = args.dry_run
     cifar: bool = args.cifar
+    paper: bool = args.paper
     n_epoch: int = args.n_epoch
     early_stop: int = args.early_stop
     log_loss_step: int = args.log_loss_step
@@ -321,9 +456,21 @@ if __name__ == "__main__":
         network = CifarAlexNet(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
     else:
         network = AlexNet(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
-    network = Trainer(
+    
+    trainer = Trainer(
         network=network, dataset=dataset, log=log, dry_run=dry_run,
         cifar=cifar,
         log_loss_step=log_loss_step,
         log_confusion_epoch=log_confusion_epoch
-    ).modern_train(message=messgae)
+    )
+
+    if paper:
+        network = trainer.paper_train(
+            n_epoch=n_epoch, early_stop=early_stop,
+            message=messgae
+        )
+    else:
+        network = trainer.modern_train(
+            lr=1e-4, n_epoch=n_epoch, early_stop=early_stop,
+            message=messgae
+        )
