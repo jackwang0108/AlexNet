@@ -20,7 +20,7 @@ import numpy as np
 from colorama import Fore, Style, init
 
 # My Library
-from network import AlexNet
+from network import AlexNet, CifarAlexNet
 from datasets import MultiDataset
 from helper import ProjectPath, DatasetPath
 from helper import ClassificationEvaluator, ClassLabelLookuper
@@ -60,6 +60,7 @@ class Trainer:
         self, network: AlexNet, dataset: str,
         log: Optional[bool] = True,
         dry_run: Optional[bool] = True,
+        cifar: Optional[bool] = False,
         log_loss_step: Optional[int] = None,
         log_confusion_epoch: Optional[int] = None
     ) -> None:
@@ -68,6 +69,7 @@ class Trainer:
         self.log = log
         self.dataset: str = dataset
         self.dry_run: bool = dry_run
+        self.cifar: bool = cifar
         self.log_loss_step: Union[None, int] = log_loss_step
         self.log_confusion_epoch: Union[None, int] = log_confusion_epoch
         self.network: AlexNet = network.to(
@@ -77,6 +79,9 @@ class Trainer:
         suffix = self.dataset + "/" + self.network.__class__.__name__
 
         # dataset
+        # remove transform first
+        if self.cifar:
+            self.train_T.transforms = self.train_T.transforms[2:]
         self.train_ds = MultiDataset(dataset=self.dataset, split="train").set_transform(
             self.train_T
         )
@@ -285,6 +290,7 @@ def parse_arg() -> argparse.Namespace:
     parser.add_argument("-v", "--version", action="version", version="%(prog)s v2.0, fixed training bugs, but there's still GPU memory leak problem")
     parser.add_argument("-d", "--dry_run", dest="dry_run", default=False, action="store_true", help=green("If run without saving tensorboard amd network params to runs and checkpoints"))
     parser.add_argument("-l", "--log", dest="log", default=False, action="store_true", help=green("If save terminal output to log"))
+    parser.add_argument("-c", "--cifar", dest="cifar", default=False, action="store_true", help=green("If use cifar modified network"))
     parser.add_argument("-ne", "--n_epoch", dest="n_epoch", type=int, default=250, help=yellow("Set maximum training epoch of each task"))
     parser.add_argument("-es", "--early_stop", dest="early_stop", type=int, default=40, help=yellow("Set maximum early stop epoch counts"))
     parser.add_argument("-lls", "--log_loss_step", dest="log_loss_step", type=int, default=100, help=yellow("Set log loss steps"))
@@ -300,8 +306,9 @@ if __name__ == "__main__":
     
     # Attention: Parameters
     log: bool = args.log
-    n_epoch: int = args.n_epoch
     dry_run: bool = args.dry_run
+    cifar: bool = args.cifar
+    n_epoch: int = args.n_epoch
     early_stop: int = args.early_stop
     log_loss_step: int = args.log_loss_step
     log_confusion_epoch: int = args.log_confusion_epoch
@@ -310,9 +317,13 @@ if __name__ == "__main__":
 
     assert dataset in (s:=["Cifar10", "Cifar100", "PascalVOC2012"]), f"{Fore.RED}Invalid Datasets, please select in {s}"
 
-    network = AlexNet(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
+    if cifar:
+        network = CifarAlexNet(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
+    else:
+        network = AlexNet(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
     network = Trainer(
         network=network, dataset=dataset, log=log, dry_run=dry_run,
+        cifar=cifar,
         log_loss_step=log_loss_step,
         log_confusion_epoch=log_confusion_epoch
     ).modern_train(message=messgae)
