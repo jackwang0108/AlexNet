@@ -415,7 +415,7 @@ if __name__ == "__main__":
     # image = [np.random.randint(low=0, high=256, size=(*rand_shape(), 3), dtype=int) for i in range(64)]
     # visualize_plt(image)
 
-    ce = ClassificationEvaluator(dataset="PascalVOC2012")
+    ce = ClassificationEvaluator(dataset="Cifar100")
     ce.confusion_top1 += 10
     a = ce.get_confusion()
     print(a)

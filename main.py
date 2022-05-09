@@ -3,6 +3,9 @@ Notes:
     心得:
         1. dataset定义处，如果要用torchvision，最好转为Image, 不然容易出错
         2. 网络定义处，最好写一个warmup来获得分类层这类和输入图像大小有关的数据
+        3. 使用decrease learning rate的时候，需要加载最优的模型
+        4. decrease learning rate的时候，平原的判定需要稳定一些，可以利用一个队列
+        5. 使用logger的时候最好写一个hook决定是print还是log
 """
 
 # Standard Library
@@ -176,6 +179,7 @@ class Trainer:
         )
         loss_func = nn.CrossEntropyLoss()
         optimizer = optim.Adam(params=self.network.parameters())
+        self.logger.info(f"Optim: {optimizer.__class__.__name__}")
         optimizer.zero_grad()
 
         # constant
@@ -190,7 +194,7 @@ class Trainer:
         loss: torch.Tensor
 
         # train network
-        for epoch in range(n_epoch):
+        for epoch in range(100000 if n_epoch is None else n_epoch):
             # setup evaluator
             train_evaluator.new_epoch()
             val_evaluator.new_epoch()
@@ -199,7 +203,7 @@ class Trainer:
             self.network.train()
             for step, (x, y) in enumerate(train_loader):
                 x = x.to(device=self.avaliable_device, dtype=self.default_dtype, non_blocking=True)
-                y = y.to(device=self.avaliable_device, dtype=torch.long)
+                y = y.to(device=self.avaliable_device, dtype=torch.long, non_blocking=True)
 
                 # inference
                 y_pred = self.network(x)
@@ -266,12 +270,12 @@ class Trainer:
                 )
             
             # print confusion matrix
-            if self.log_confusion_epoch is not None and epoch % self.log_confusion_epoch == 0:
-                table = val_evaluator.get_confusion(top=5, title=f"Top 5 Confusion Matrix of dataset {self.dataset}")
-                if self.log:
-                    self.logger.info(str(table))
-                else:
-                    print(table)
+            # if self.log_confusion_epoch is not None and epoch % self.log_confusion_epoch == 0:
+            #     table = val_evaluator.get_confusion(top=5, title=f"Top 5 Confusion Matrix of dataset {self.dataset}")
+            #     if self.log:
+            #         self.logger.info(str(table))
+            #     else:
+            #         print(table)
 
         return self.network
 
@@ -311,10 +315,14 @@ class Trainer:
 
         # constant
         max_top1: float = 0
+        max_top5: float = 0
+        plateau: int = int(early_stop * 1/3)
+        plateau_cnt: int = 0
         before_stop: int = 3
         early_stop_cnt: int = 0
         ne_digits: int = len(str(n_epoch))
         es_digits: int = len(str(early_stop))
+        p_digits: int = len(str(plateau))
 
         # typing
         x: torch.Tensor
@@ -322,7 +330,8 @@ class Trainer:
         loss: torch.Tensor
 
         # train network
-        for epoch in range(n_epoch):
+        last_best_epoch: List[int] = []
+        for epoch in range(100000 if n_epoch is None else n_epoch):
             # setup evaluator
             train_evaluator.new_epoch()
             val_evaluator.new_epoch()
@@ -346,7 +355,7 @@ class Trainer:
                 if self.log and (self.log_loss_step is not None and step % self.log_loss_step == 0):
                     self.logger.info(f"{Fore.GREEN}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}d}|{n_epoch}], step: {step}, loss: {loss:>.5f}")
                 if not self.dry_run:
-                    if step % self.log_loss_step == 0:
+                    if self.log_loss_step is not None and step % self.log_loss_step == 0:
                         self.writer.add_scalar(tag="train-loss", scalar_value=loss.cpu().item(), global_step=step + len(train_loader) * epoch)
                 train_evaluator.record(y_pred=y_pred, y=y)
 
@@ -355,7 +364,7 @@ class Trainer:
             with torch.no_grad():
                 for step, (x, y) in enumerate(val_loader):
                     x = x.to(device=self.avaliable_device, dtype=self.default_dtype, non_blocking=True)
-                    y = y.to(device=self.avaliable_device, dtype=torch.long)
+                    y = y.to(device=self.avaliable_device, dtype=torch.long, non_blocking=True)
 
                     # inference
                     y_pred = self.network(x)
@@ -368,9 +377,13 @@ class Trainer:
             if max_top1 <= new_acc[0]:
                 early_stop_cnt = 0
                 max_top1 = new_acc[0]
+                max_top5 = new_acc[1]
+                last_best_epoch.append(epoch)
                 self.logger.info(
                     f"{Fore.BLUE}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
-                    f"new top1 Acc: {new_acc[0]:>.5f}, top5 Acc:{new_acc[1]:>.5f}"
+                    f"new top1 Acc: {new_acc[0]:>.5f}, new top5 Acc:{new_acc[1]:>.5f}, "\
+                    f"lr: {optimizer.param_groups[0]['lr']}, "\
+                    f"Plateau: [{plateau_cnt:>{p_digits}d}|{plateau}]"
                 )
                 if not self.dry_run:
                     torch.save(self.network.state_dict(), self.checkpoint_path)
@@ -382,15 +395,21 @@ class Trainer:
                 early_stop_cnt += 1
                 self.logger.info(
                     f"{Fore.BLUE}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
-                    f"top1 Acc: [{new_acc[0]:>5f}|{max_top1:>.5f}], top5 Acc: [{new_acc[1]:>5f}] early_stop_cnt: [{early_stop_cnt:>{es_digits}d}|{early_stop}]"
+                    f"top1 Acc: [{new_acc[0]:>5f}|{max_top1:>.5f}], top5 Acc: [{new_acc[1]:>.5f}|{max_top5:>.5f}], "\
+                    f"early_stop_cnt: [{early_stop_cnt:>{es_digits}d}|{early_stop}], "\
+                    f"lr: {optimizer.param_groups[0]['lr']}, "\
+                    f"Plateau: [{plateau_cnt:>{p_digits}d}|{plateau}]"
                 )
 
             # adjust lr as said in paper
-            if early_stop_cnt >= int(early_stop * 2/3) and before_stop > 0:
+            if len(last_best_epoch) > 4 and (plateau_cnt := epoch - last_best_epoch[-2]) >= plateau and before_stop > 0:
                 before_stop -= 1
                 early_stop_cnt = 0
                 for param_group in optimizer.param_groups:
                     param_group["lr"] /= 10
+                self.network.load_state_dict(torch.load(self.checkpoint_path, map_location=self.avaliable_device))
+                before = optimizer.param_groups[0]["lr"] * 10
+                self.logger.info(f"{Fore.YELLOW}Decrease lr at epoch: {epoch}, from {before_stop} to {before / 10}, switch to best model")
 
             # tensorboard
             if not self.dry_run:
@@ -405,12 +424,12 @@ class Trainer:
                 )
             
             # print confusion matrix
-            if self.log_confusion_epoch is not None and epoch % self.log_confusion_epoch == 0:
-                table = val_evaluator.get_confusion(top=5, title=f"Top 5 Confusion Matrix of dataset {self.dataset}")
-                if self.log:
-                    self.logger.info(str(table))
-                else:
-                    print(table)
+            # if self.log_confusion_epoch is not None and epoch % self.log_confusion_epoch == 0:
+            #     table = val_evaluator.get_confusion(top=5, title=f"Top 5 Confusion Matrix of dataset {self.dataset}")
+            #     if self.log:
+            #         self.logger.info(str(table))
+            #     else:
+            #         print(table)
 
         return self.network
 
@@ -425,9 +444,9 @@ def parse_arg() -> argparse.Namespace:
     parser.add_argument("-l", "--log", dest="log", default=False, action="store_true", help=green("If save terminal output to log"))
     parser.add_argument("-c", "--cifar", dest="cifar", default=False, action="store_true", help=green("If use cifar modified network"))
     parser.add_argument("-p", "--paper", dest="paper", default=False, action="store_true", help=green("If train the network using paper setting"))
-    parser.add_argument("-ne", "--n_epoch", dest="n_epoch", type=int, default=250, help=yellow("Set maximum training epoch of each task"))
-    parser.add_argument("-es", "--early_stop", dest="early_stop", type=int, default=40, help=yellow("Set maximum early stop epoch counts"))
-    parser.add_argument("-lls", "--log_loss_step", dest="log_loss_step", type=int, default=100, help=yellow("Set log loss steps"))
+    parser.add_argument("-ne", "--n_epoch", dest="n_epoch", type=Union[int, None], default=None, help=yellow("Set maximum training epoch of each task"))
+    parser.add_argument("-es", "--early_stop", dest="early_stop", type=int, default=250, help=yellow("Set maximum early stop epoch counts"))
+    parser.add_argument("-lls", "--log_loss_step", dest="log_loss_step", type=Union[int, None], default=100, help=yellow("Set log loss steps"))
     parser.add_argument("-lce", "--log_confusion_epoch", dest="log_confusion_epoch", type=int, default=10, help=yellow("Set log confusion matrix epochs"))
     parser.add_argument("-ds", "--dataset", dest="dataset", type=str, default="Cifar10", help=blue("Set training datasets"))
     parser.add_argument("-m", "--message", dest="message", type=str, default=f"", help=blue("Training digest"))
