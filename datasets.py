@@ -1,5 +1,3 @@
-# * 心得:
-#           1. 如果要用torchvision，最好转为Image, 不然容易出错
 
 # Standard Library
 import pickle
@@ -37,7 +35,7 @@ ClassType = TypeVar(
 class MultiDataset(data.Dataset):
     def __init__(self, dataset: str, split: str):
         super(MultiDataset, self).__init__()
-        assert split in (s := ["train", "val", "test"]), f"{Fore.RED}Invalid split, s"
+        assert split in (s := ["train", "val", "test"]), f"{Fore.RED}Invalid split, should be in {s}"
         self.split = split
         self.dataset = dataset
         self._dataset_reader: Dict[str, Callable] = {
@@ -50,7 +48,8 @@ class MultiDataset(data.Dataset):
         self.image: Union[np.ndarray, List[Path]]
         self.label: np.ndarray
         self.image, self.label = self._dataset_reader[self.dataset]()
-
+        self.select_train_val()
+        self.num_class = len(ClassLabelLookuper(self.dataset).cls)
 
     def __len__(self) -> int:
         return len(self.image)
@@ -63,8 +62,47 @@ class MultiDataset(data.Dataset):
             image = Image.fromarray(image.astype(np.uint8)).convert("RGB")
         return self.transform(image), label
     
-    def set_transform(self, transform: T.Compose):
+    def set_transform(self, transform: T.Compose) -> "MultiDataset":
         self.transform = transform
+        return self
+
+    def select_train_val(self, trainval_ratio: Optional[float] = 0.2) -> None:
+        # get image of each label
+        self.label_image: Dict[int, np.ndarray] = {}
+        for label in np.unique(self.label):
+            self.label_image[label] = np.where(self.label == label)[0]
+
+        if self.dataset in ["Cifar10", "Cifar100"]:
+            if self.split == "test":
+                return
+            else:
+                # generate train val if not exists, else load
+                if (config_path := ProjectPath.config.joinpath(f"{self.dataset}.npz")).exists():
+                    data = np.load(config_path)
+                    ratio, train, val =data["ratio"], data["train"], data["val"]
+                if not config_path.exists() or ratio != trainval_ratio:
+                    train, val = [], []
+                    for label, image_idx in self.label_image.items():
+                        np.random.shuffle(image_idx)
+                        val_num = int(trainval_ratio * len(image_idx))
+                        val.append(image_idx[:val_num])
+                        train.append(image_idx[val_num:])
+                    train = np.stack(train, axis=0)
+                    val = np.stack(val, axis=0)
+                    config_path.parent.mkdir(parents=True, exist_ok=True)
+                    np.savez(config_path, ratio=trainval_ratio, train=train, val=val)
+                train = np.concatenate(train, axis=0)
+                val = np.concatenate(val, axis=0)
+                
+                # select train val
+                if self.split == "val":
+                    self.image = self.image[val]
+                    self.label = self.label[val]
+                else:
+                    self.image = self.image[train]
+                    self.label = self.label[train]
+        else:
+            return
 
 
     def __read_cifar10(self) -> Tuple[np.ndarray, np.ndarray]:
@@ -109,11 +147,12 @@ class MultiDataset(data.Dataset):
                 label.extend([ccn.get_label(k)] * len(v))
         else:
             assert False, f"{Fore.RED}PascalVOC2012 test data is not accesibly"
+        # Attention: PascalVOC2012 中图像是存在重复的
         image, idx = np.unique(image, return_index=True)
         return image, np.array(label)[idx]
 
 if __name__ == "__main__":
-    # md = MultiDataset(dataset="PascalVOC2012", split="train")
+    # md = MultiDataset(dataset="PascalVOC2012", split="val")
     # tt = T.Compose([
     #     T.RandomHorizontalFlip(),
     #     T.Resize((224, 224)),
@@ -128,9 +167,10 @@ if __name__ == "__main__":
     ])
     md.set_transform(tt)
 
+    ccn = ClassLabelLookuper(datasets=md.dataset)
     dl = data.DataLoader(md, batch_size=64)
     for x, y in dl:
         print(x.shape)
-        visualize_pil(x).show()
+        visualize_plt(x, [ccn.get_class(i.item()) for i in y])
         break
 
