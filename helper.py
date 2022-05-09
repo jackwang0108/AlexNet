@@ -19,6 +19,7 @@ init(autoreset=True)
 class ProjectPath:
     base: Path = Path(__file__).resolve().parent
     runs: Path = base.joinpath("runs")
+    log: Path = base.joinpath("logs")
     config: Path = base.joinpath("config")
     dataset: Path = base.joinpath("dataset")
     checkpoints: Path = base.joinpath("checkpoints")
@@ -120,8 +121,42 @@ class ClassificationEvaluator:
 
     def __check(self, top: int):
         assert top in [1, 5], f"{Fore.RED}Wrong top-k, can only be top 1 or top 5"
+    
+    def new_epoch(self):
+        self.confusion_top1 = np.zeros(shape=(len(self.cls),) * 2, dtype=int)
+        self.confusion_top5 = np.zeros(shape=(len(self.cls),) * 2, dtype=int)
+    
+    def record(self, y_pred: torch.Tensor, y: torch.Tensor) -> None:
+        y = y.detach().cpu().numpy()
+        y_pred = y_pred.detach().cpu().numpy()
 
-    def get_confusion(self, top: Optional[int] = 1, title: Optional[str] = None) -> Union[str, pd.DataFrame]:
+        # get valid examples
+        k = (y >= 0) & (y < len(self.cls))
+
+        # get top 5 predictions
+        y_pred = np.argpartition(y_pred, kth=-5, axis=1)[:, -5:][:, ::-1]
+
+        # get top 1 confusion matrix of the batch
+        top1_cm = np.bincount(
+            len(self.cls) * y[k].astype(int) + y_pred[k, 0].astype(int),
+            minlength=len(self.cls) ** 2
+        ).reshape((len(self.cls), ) * 2)
+        self.confusion_top1 += top1_cm
+
+        # get top 5 confusion matrix of the batch
+        correct_mask = (y[:, np.newaxis] == y_pred).any(axis=1)
+        _y_pred = np.zeros_like(y)
+        _y_pred[correct_mask] = y[correct_mask]
+        _y_pred[~correct_mask] = y_pred[~correct_mask, 0]
+        y_pred = _y_pred
+
+        top5_cm = np.bincount(
+            len(self.cls) * y[k].astype(int) + y_pred[k].astype(int),
+            minlength=len(self.cls) ** 2
+        ).reshape((len(self.cls), ) * 2)
+        self.confusion_top5 += top5_cm
+
+    def get_confusion(self, top: Optional[int] = 1, title: Optional[str] = None, tofile: bool = False) -> Union[str, pd.DataFrame]:
         self.__check(top)
         confusion_matrix = getattr(self, f"confusion_top{top}")
         df = pd.DataFrame(confusion_matrix, index=self.cls, columns=self.cls)
@@ -135,7 +170,7 @@ class ClassificationEvaluator:
             table = AsciiTable(ll)
             for i in range(len(self.cls) + 1):
                 table.justify_columns[i] = "center"
-            if table.ok:
+            if table.ok or tofile:
                 table = str(table.table).split("\n")
                 len_row = len(table[0])
                 c = f"Top {top} Confusion Matrix of dataset {self.ds}" if title is None else title
@@ -151,6 +186,41 @@ class ClassificationEvaluator:
         pd.options.display.max_rows = len(self.cls)
         print(s1 if no_tbs else s2)
         return df
+    
+    @property
+    def acc(self) -> Tuple[float, float]:
+        accs = []
+        for top in [1, 5]:
+            cm = getattr(self, f"confusion_top{top}")
+            with np.errstate(divide='ignore', invalid='ignore'):
+                accs.append(
+                    np.nan_to_num(cm.trace() / cm.sum())
+                )
+        return tuple(accs)
+
+    @property
+    def recall(self) -> Tuple[float, float]:
+        recalls = []
+        for top in [1, 5]:
+            cm = getattr(self, f"confusion_top{top}")
+            with np.errstate(divide="ignore", invalid="ignore"):
+                per_class_recall: np.ndarray = cm.diagonal() / cm.sum(axis=1)
+                per_class_recall[np.isnan(per_class_recall)] = 0
+                mean_recall = per_class_recall.mean()
+            recalls.append(mean_recall.item())
+        return tuple(recalls)
+
+    @property
+    def precision(self) -> Tuple[float, float]:
+        precisions = []
+        for top in [1, 5]:
+            cm = getattr(self, f"confusion_top{top}")
+            with np.errstate(divide="ignore", invalid="ignore"):
+                per_class_precision: np.ndarray = cm.diagonal() / cm.sum(axis=0)
+                per_class_precision[np.isnan(per_class_precision)] = 0
+                mean_precision = per_class_precision.mean()
+            precisions.extend(mean_precision.item())
+        return tuple(precisions)
 
 
 ImageType = TypeVar(
