@@ -281,12 +281,14 @@ def parse_arg() -> argparse.Namespace:
     def yellow(s): return f"{Fore.YELLOW}{s}{Style.RESET_ALL}"
     def blue(s): return f"{Fore.BLUE}{Style.BRIGHT}{s}{Style.RESET_ALL}"
 
-    parser = argparse.ArgumentParser(description=blue("iCaRL Pytorch Implementation training util by Shihong Wang (Jack3Shihong@gmail.com)"))
+    parser = argparse.ArgumentParser(description=blue("AlexNet Pytorch Implementation training util by Shihong Wang (Jack3Shihong@gmail.com)"))
     parser.add_argument("-v", "--version", action="version", version="%(prog)s v2.0, fixed training bugs, but there's still GPU memory leak problem")
     parser.add_argument("-d", "--dry_run", dest="dry_run", default=False, action="store_true", help=green("If run without saving tensorboard amd network params to runs and checkpoints"))
     parser.add_argument("-l", "--log", dest="log", default=False, action="store_true", help=green("If save terminal output to log"))
     parser.add_argument("-ne", "--n_epoch", dest="n_epoch", type=int, default=250, help=yellow("Set maximum training epoch of each task"))
     parser.add_argument("-es", "--early_stop", dest="early_stop", type=int, default=40, help=yellow("Set maximum early stop epoch counts"))
+    parser.add_argument("-lls", "--log_loss_step", dest="log_loss_step", type=int, default=100, help=yellow("Set log loss steps"))
+    parser.add_argument("-lce", "--log_confusion_epoch", dest="log_confusion_epoch", type=int, default=10, help=yellow("Set log confusion matrix epochs"))
     parser.add_argument("-ds", "--dataset", dest="dataset", type=str, default="Cifar10", help=blue("Set training datasets"))
     parser.add_argument("-m", "--message", dest="message", type=str, default=f"", help=blue("Training digest"))
     return parser.parse_args()
@@ -294,21 +296,23 @@ def parse_arg() -> argparse.Namespace:
 
 if __name__ == "__main__":
     # get arg
-    args = get_args()
+    args = parse_arg()
     
     # Attention: Parameters
     log: bool = args.log
     n_epoch: int = args.n_epoch
     dry_run: bool = args.dry_run
     early_stop: int = args.early_stop
+    log_loss_step: int = args.log_loss_step
+    log_confusion_epoch: int = args.log_confusion_epoch
     messgae: str = args.message
-    dataset: str = args.dataset.capitalize()
+    dataset: str = args.dataset
 
     assert dataset in (s:=["Cifar10", "Cifar100", "PascalVOC2012"]), f"{Fore.RED}Invalid Datasets, please select in {s}"
 
     network = AlexNet(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
     network = Trainer(
-        network=network, dataset=dataset, log=log, dry_run=dry_run, 
-        log_loss_step=100,
-        log_confusion_epoch=1
-    ).modern_train(message="DEBUG RUN")
+        network=network, dataset=dataset, log=log, dry_run=dry_run,
+        log_loss_step=log_loss_step,
+        log_confusion_epoch=log_confusion_epoch
+    ).modern_train(message=messgae)
