@@ -6,8 +6,9 @@ from typing import *
 
 # Attention: Since cifar image is only 32 * 32, ksize of first few convolutions layers must be modified,
 # Attention：if you want to directly take in cifar image without resize
+
 class CifarAlexNetPaper(nn.Module):
-    def __init__(self, in_size: Optional[int] = None, predict_class: int = 10):
+    def __init__(self, predict_class: int = 10):
         super().__init__()
         self.conv1 = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=96,
@@ -40,8 +41,9 @@ class CifarAlexNetPaper(nn.Module):
             nn.LocalResponseNorm(alpha=1e-4, beta=0.75, k=2, size=5),
             nn.MaxPool2d(kernel_size=(3, 3), stride=2)
         )
+        self.avg_pool = nn.AdaptiveMaxPool2d(output_size=(6, 6))
         self.linear1 = nn.Sequential(
-            nn.Linear(in_features=1024 if in_size is None else in_size,
+            nn.Linear(in_features=256 * 6 * 6,
                       out_features=4096),
             nn.ReLU(),
             nn.Dropout(p=0.5)
@@ -64,6 +66,7 @@ class CifarAlexNetPaper(nn.Module):
         x: torch.Tensor = self.conv3(x)
         x: torch.Tensor = self.conv4(x)
         x: torch.Tensor = self.conv5(x)
+        x: torch.Tensor = self.avg_pool(x)
         x: torch.Tensor = x.flatten(start_dim=1)
         x: torch.Tensor = self.linear1(x)
         x: torch.Tensor = self.linear2(x)
@@ -104,8 +107,9 @@ class AlexNetPaper(nn.Module):
             nn.LocalResponseNorm(alpha=1e-4, beta=0.75, k=2, size=5),
             nn.MaxPool2d(kernel_size=(3, 3), stride=2)
         )
+        self.avg_pool = nn.AdaptiveMaxPool2d(output_size=(6, 6))
         self.linear1 = nn.Sequential(
-            nn.Linear(in_features=6400 if in_size is None else in_size, out_features=4096),
+            nn.Linear(in_features=256 * 6 * 6),
             nn.ReLU(),
             nn.Dropout(p=0.5)
         )
@@ -123,6 +127,7 @@ class AlexNetPaper(nn.Module):
         x: torch.Tensor = self.conv3(x)
         x: torch.Tensor = self.conv4(x)
         x: torch.Tensor = self.conv5(x)
+        x: torch.Tensor = self.avg_pool(x)
         x: torch.Tensor = x.flatten(start_dim=1)
         x: torch.Tensor = self.linear1(x)
         x: torch.Tensor = self.linear2(x)
@@ -157,7 +162,7 @@ class AlexNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=(3, 3), stride=2)
         )
-        self.average_pool = nn.AdaptiveAvgPool2d(output_size=(6, 6))
+        self.avg_pool = nn.AdaptiveAvgPool2d(output_size=(6, 6))
         self.linear1 = nn.Sequential(
             nn.Linear(in_features=256 * 6 * 6, out_features=4096),
             nn.ReLU(inplace=True),
@@ -177,7 +182,7 @@ class AlexNet(nn.Module):
         x: torch.Tensor = self.conv3(x)
         x: torch.Tensor = self.conv4(x)
         x: torch.Tensor = self.conv5(x)
-        x: torch.Tensor = self.average_pool(x)
+        x: torch.Tensor = self.avg_pool(x)
         x: torch.Tensor = x.flatten(start_dim=1)
         x: torch.Tensor = self.linear1(x)
         x: torch.Tensor = self.linear2(x)
@@ -213,7 +218,7 @@ class CifarAlexNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=(3, 3), stride=2)
         )
-        self.average_pool = nn.AdaptiveAvgPool2d((6, 6))
+        self.avg_pool = nn.AdaptiveAvgPool2d((6, 6))
         self.linear1 = nn.Sequential(
             nn.Linear(256 * 6 * 6,
                       out_features=4096),
@@ -238,7 +243,7 @@ class CifarAlexNet(nn.Module):
         x: torch.Tensor = self.conv3(x)
         x: torch.Tensor = self.conv4(x)
         x: torch.Tensor = self.conv5(x)
-        x: torch.Tensor = self.average_pool(x)
+        x: torch.Tensor = self.avg_pool(x)
         x: torch.Tensor = x.flatten(start_dim=1)
         x: torch.Tensor = self.linear1(x)
         x: torch.Tensor = self.linear2(x)

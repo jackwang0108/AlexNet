@@ -7,11 +7,15 @@ Notes:
         4. decrease learning rate的时候，平原的判定需要稳定一些，可以利用一个队列
         5. 使用logger的时候最好写一个hook决定是print还是log
         6. 写网络的时候多用用AvgPool2D
+        7. 跑实验一定要用函数，不然最后无法退出
+        8. 退出时候注意要用atexit，否则会由于builtin被释放导致很多函数用不了
 """
 
 # Standard Library
+import os
 import re
 import time
+import atexit
 import logging
 import argparse
 import platform
@@ -104,10 +108,13 @@ class Trainer:
         terminal.setFormatter(fmt=fmt)
         self.logger.addHandler(terminal)
 
+        msg = "Initialize Trainer".center(os.get_terminal_size().columns, "+")
+        self.logger.info(f"{Fore.YELLOW}" + msg)
+
         if log:
             self.log_path = ProjectPath.log / suffix / f"{self.start_time}.log"
             self.log_path.parent.mkdir(parents=True, exist_ok=True)
-            self.logger.info(f"{Fore.YELLOW}Save log to {self.log_path.relative_to(ProjectPath.base)}")
+            self.logger.info(f"{Fore.GREEN}Save log to {self.log_path.relative_to(ProjectPath.base)}")
             file = logging.FileHandler(str(self.log_path))
             file.setLevel(logging.INFO)
             file.setFormatter(fmt)
@@ -117,37 +124,42 @@ class Trainer:
         if not dry_run:
             writer_path = ProjectPath.runs / suffix / self.start_time
             self.logger.info(
-                f"{Fore.YELLOW}Training curves can be found in {writer_path.relative_to(ProjectPath.base)}")
+                f"{Fore.GREEN}Training curves can be found in {writer_path.relative_to(ProjectPath.base)}")
             self.writer = SummaryWriter(log_dir=writer_path)
 
         # checkpoints
         if not dry_run:
             self.checkpoint_path = ProjectPath.checkpoints / suffix / self.start_time / "best.pt"
             self.logger.info(
-                f"{Fore.YELLOW}Save checkpoint to {self.checkpoint_path.relative_to(ProjectPath.base)}")
+                f"{Fore.GREEN}Save checkpoint to {self.checkpoint_path.relative_to(ProjectPath.base)}")
             self.checkpoint_path.parent.mkdir(parents=True)
+        
+        atexit.register(self._cleanup)
 
-    def __del__(self):
-        if not self.dry_run:
-            self.writer.close()
-
-        if self.log:
-            self.logger.info(f"{Fore.MAGENTA}Shutdown at {datetime.datetime.now()}, waiting...")
-        else:
-            print(f"{Fore.MAGENTA}Shutdown at {datetime.datetime.now()}, waiting...")
-        # shutdown logging and flush buffer
-        # wait for write to file
-        time.sleep(3)
-        logging.shutdown()
+    def _cleanup(self):
+        p = str(self.log_path)
 
         # clean logs
         if self.log:
-            with self.log_path.open(mode="r+") as f:
+            # Attention 要用atexit调用，否则，builtin在调用del前就已经被释放
+            with open(p, mode="r+") as f:
                 lines = f.readlines()
                 for i in range(len(lines)):
                     lines[i] = re.sub(r"..\d\dm", "", lines[i])
                 f.seek(0)
                 f.write("".join(lines[:-1]))
+
+        print(f"{Fore.RED}Shutdown at {datetime.datetime.now()}, waiting...")
+        if not self.dry_run:
+            self.writer.close()
+
+        # shutdown logging and flush buffer
+        # wait for write to file
+        time.sleep(3)
+        try:
+            logging.shutdown()
+        except NameError:
+            pass
 
     def modern_train(
         self, 
@@ -157,12 +169,13 @@ class Trainer:
         message: Optional[str] = None
     ) -> AlexNetPaper:
         # log training digest
-        self.logger.info(f"Training Digest: {message}")
-        self.logger.info(f"AlexNet training with modern setup")
-        self.logger.info(f"lr: {lr}")
-        self.logger.info(f"e_poech: {n_epoch}")
-        self.logger.info(f"early_stop: {early_stop}")
-        self.logger.info(f"datasets: {self.train_ds.dataset}")
+        msg = "Start Training".center(os.get_terminal_size().columns, "+")
+        self.logger.info(f"{Fore.GREEN}" + msg)
+        self.logger.info(f"{Fore.GREEN}{self.network.__class__.__name__} training with modern setup")
+        self.logger.info(f"{Fore.GREEN}lr: {lr}")
+        self.logger.info(f"{Fore.GREEN}e_poech: {n_epoch}")
+        self.logger.info(f"{Fore.GREEN}early_stop: {early_stop}")
+        self.logger.info(f"{Fore.GREEN}datasets: {self.train_ds.dataset}")
         
 
         # detect anomaly
@@ -180,8 +193,8 @@ class Trainer:
             pin_memory=True
         )
         loss_func = nn.CrossEntropyLoss()
-        optimizer = optim.Adam(params=self.network.parameters())
-        self.logger.info(f"Optim: {optimizer.__class__.__name__}")
+        optimizer = optim.SGD(params=self.network.parameters(), lr=lr)
+        self.logger.info(f"{Fore.GREEN}Optim: {optimizer.__class__.__name__}")
         optimizer.zero_grad()
 
         # constant
@@ -196,7 +209,7 @@ class Trainer:
         loss: torch.Tensor
 
         # train network
-        for epoch in range(100000 if n_epoch is None else n_epoch):
+        for epoch in range(n_epoch):
             # setup evaluator
             train_evaluator.new_epoch()
             val_evaluator.new_epoch()
@@ -218,7 +231,7 @@ class Trainer:
 
                 # log
                 if self.log and (self.log_loss_step is not None and step % self.log_loss_step == 0):
-                    self.logger.info(f"{Fore.GREEN}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}d}|{n_epoch}], step: {step}, loss: {loss:>.5f}")
+                    self.logger.info(f"Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}d}|{n_epoch}], step: {step}, loss: {loss:>.5f}")
                 if not self.dry_run:
                     if step % self.log_loss_step == 0:
                         self.writer.add_scalar(tag="train-loss", scalar_value=loss.cpu().item(), global_step=step + len(train_loader) * epoch)
@@ -237,25 +250,26 @@ class Trainer:
                     # log
                     val_evaluator.record(y_pred=y_pred, y=y)
             
-            # early stop
+            # early stop update
             new_acc = val_evaluator.acc
+            # new top1 acc
             if max_top1 <= new_acc[0]:
                 early_stop_cnt = 0
                 max_top1 = new_acc[0]
                 self.logger.info(
-                    f"{Fore.BLUE}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
+                    f"{Fore.YELLOW}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
                     f"new top1 Acc: {new_acc[0]:>.5f}, top5 Acc:{new_acc[1]:>.5f}"
                 )
                 if not self.dry_run:
                     torch.save(self.network.state_dict(), self.checkpoint_path)
                     self.logger.info(
-                        f"{Fore.MAGENTA}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
+                        f"{Fore.YELLOW}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
                         f"save checkpoint to {self.checkpoint_path.relative_to(ProjectPath.base)}"
                     )
             else:
                 early_stop_cnt += 1
                 self.logger.info(
-                    f"{Fore.BLUE}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
+                    f"{Fore.GREEN}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
                     f"top1 Acc: [{new_acc[0]:>5f}|{max_top1:>.5f}], top5 Acc: [{new_acc[1]:>5f}] early_stop_cnt: [{early_stop_cnt:>{es_digits}d}|{early_stop}]"
                 )
 
@@ -270,7 +284,7 @@ class Trainer:
                     },
                     global_step=epoch
                 )
-            
+
             # print confusion matrix
             # if self.log_confusion_epoch is not None and epoch % self.log_confusion_epoch == 0:
             #     table = val_evaluator.get_confusion(top=5, title=f"Top 5 Confusion Matrix of dataset {self.dataset}")
@@ -278,6 +292,11 @@ class Trainer:
             #         self.logger.info(str(table))
             #     else:
             #         print(table)
+
+            # check early stop
+            if early_stop_cnt >= early_stop:
+                self.logger.info(f"{Fore.YELLOW}Early Stopped at epoch: {epoch}!")
+                break
 
         return self.network
 
@@ -289,7 +308,8 @@ class Trainer:
         message: Optional[str] = None
     ) -> AlexNetPaper:
         # log training digest
-        self.logger.info("Start Training".center(200, "+"))
+        msg = "Start Training".center(os.get_terminal_size().columns, "+")
+        self.logger.info(f"{Fore.GREEN}" + msg)
         self.logger.info(f"Training Digest: {message}")
         self.logger.info(f"AlexNet training with paper setup")
         self.logger.info(f"e_poech: {n_epoch}")
@@ -333,7 +353,7 @@ class Trainer:
 
         # train network
         last_best_epoch: List[int] = []
-        for epoch in range(100000 if n_epoch is None else n_epoch):
+        for epoch in range(n_epoch):
             # setup evaluator
             train_evaluator.new_epoch()
             val_evaluator.new_epoch()
@@ -355,7 +375,7 @@ class Trainer:
 
                 # log
                 if self.log and (self.log_loss_step is not None and step % self.log_loss_step == 0):
-                    self.logger.info(f"{Fore.GREEN}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}d}|{n_epoch}], step: {step}, loss: {loss:>.5f}")
+                    self.logger.info(f"Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}d}|{n_epoch}], step: {step}, loss: {loss:>.5f}")
                 if not self.dry_run:
                     if self.log_loss_step is not None and step % self.log_loss_step == 0:
                         self.writer.add_scalar(tag="train-loss", scalar_value=loss.cpu().item(), global_step=step + len(train_loader) * epoch)
@@ -382,36 +402,41 @@ class Trainer:
                 max_top5 = new_acc[1]
                 last_best_epoch.append(epoch)
                 self.logger.info(
-                    f"{Fore.BLUE}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
-                    f"new top1 Acc: {new_acc[0]:>.5f}, new top5 Acc:{new_acc[1]:>.5f}, "\
+                    f"{Fore.YELLOW}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
+                    f"new top1 Acc: {Style.BRIGHT}{new_acc[0]:>.5f}{Style.NORMAL}, with top5 Acc:{new_acc[1]:>.5f}, "\
                     f"lr: {optimizer.param_groups[0]['lr']}, "\
-                    f"Plateau: [{plateau_cnt:>{p_digits}d}|{plateau}]"
+                    f"Plateau: [{str(plateau_cnt):>{p_digits}s}|{plateau}]"
                 )
                 if not self.dry_run:
                     torch.save(self.network.state_dict(), self.checkpoint_path)
                     self.logger.info(
-                        f"{Fore.MAGENTA}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
+                        f"{Fore.YELLOW}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
                         f"save checkpoint to {self.checkpoint_path.relative_to(ProjectPath.base)}"
                     )
             else:
                 early_stop_cnt += 1
                 self.logger.info(
-                    f"{Fore.BLUE}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
-                    f"top1 Acc: [{new_acc[0]:>5f}|{max_top1:>.5f}], top5 Acc: [{new_acc[1]:>.5f}|{max_top5:>.5f}], "\
+                    f"{Fore.GREEN}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
+                    f"top1 Acc: [{new_acc[0]:>5f}|{Style.BRIGHT}{max_top1:>.5f}{Style.NORMAL}], top5 Acc: [{new_acc[1]:>.5f}|{max_top5:>.5f}], "\
                     f"early_stop_cnt: [{early_stop_cnt:>{es_digits}d}|{early_stop}], "\
                     f"lr: {optimizer.param_groups[0]['lr']}, "\
-                    f"Plateau: [{plateau_cnt:>{p_digits}d}|{plateau}]"
+                    f"Plateau: [{str(plateau_cnt):>{p_digits}s}|{plateau}]"
                 )
 
-            # adjust lr as said in paper
-            if len(last_best_epoch) > 4 and (plateau_cnt := epoch - last_best_epoch[-2]) >= plateau and before_stop > 0:
+            # adjust lr after in the plateau
+            if before_stop > 0 and len(last_best_epoch) > 4 and (plateau_cnt := epoch - last_best_epoch[-2]) >= plateau:
                 before_stop -= 1
                 early_stop_cnt = 0
+                last_best_epoch.extend([epoch] * 3)
+                plateau_cnt = 0
                 for param_group in optimizer.param_groups:
                     param_group["lr"] /= 10
                 self.network.load_state_dict(torch.load(self.checkpoint_path, map_location=self.avaliable_device))
                 before = optimizer.param_groups[0]["lr"] * 10
-                self.logger.info(f"{Fore.YELLOW}Decrease lr at epoch: {epoch}, from {before_stop} to {before / 10}, switch to best model")
+                self.logger.info(f"{Fore.GREEN}Decrease lr at epoch: {epoch}, from {before_stop} to {before / 10}, switch to best model, max top1 Acc: {max_top1}")
+            
+            if early_stop <= 0:
+                plateau_cnt = "NA"
 
             # tensorboard
             if not self.dry_run:
@@ -428,6 +453,8 @@ class Trainer:
             # early stop
             if early_stop_cnt >= early_stop:
                 self.logger.info(f"{Fore.MAGENTA}Early Stopped at epoch: {epoch}")
+                break
+
             # print confusion matrix
             # if self.log_confusion_epoch is not None and epoch % self.log_confusion_epoch == 0:
             #     table = val_evaluator.get_confusion(top=5, title=f"Top 5 Confusion Matrix of dataset {self.dataset}")
@@ -448,10 +475,11 @@ def parse_arg() -> argparse.Namespace:
     parser.add_argument("-d", "--dry_run", dest="dry_run", default=False, action="store_true", help=green("If run without saving tensorboard amd network params to runs and checkpoints"))
     parser.add_argument("-l", "--log", dest="log", default=False, action="store_true", help=green("If save terminal output to log"))
     parser.add_argument("-c", "--cifar", dest="cifar", default=False, action="store_true", help=green("If use cifar modified network"))
-    parser.add_argument("-p", "--paper", dest="paper", default=False, action="store_true", help=green("If train the network using paper setting"))
-    parser.add_argument("-ne", "--n_epoch", dest="n_epoch", type=Union[int, None], default=250, help=yellow("Set maximum training epoch of each task"))
+    parser.add_argument("-pt", "--paper_train", dest="paper_train", default=False, action="store_true", help=green("If train the network using paper setting"))
+    parser.add_argument("-pm", "--paper_model", dest="paper_model", default=False, action="store_true", help=green("If train the network exactly the same in paper"))
+    parser.add_argument("-ne", "--n_epoch", dest="n_epoch", type=int, default=200, help=yellow("Set maximum training epoch of each task"))
     parser.add_argument("-es", "--early_stop", dest="early_stop", type=int, default=50, help=yellow("Set maximum early stop epoch counts"))
-    parser.add_argument("-lls", "--log_loss_step", dest="log_loss_step", type=Union[int, None], default=100, help=yellow("Set log loss steps"))
+    parser.add_argument("-lls", "--log_loss_step", dest="log_loss_step", type=int, default=100, help=yellow("Set log loss steps"))
     parser.add_argument("-lce", "--log_confusion_epoch", dest="log_confusion_epoch", type=int, default=10, help=yellow("Set log confusion matrix epochs"))
     parser.add_argument("-ds", "--dataset", dest="dataset", type=str, default="Cifar10", help=blue("Set training datasets"))
     parser.add_argument("-m", "--message", dest="message", type=str, default=f"", help=blue("Training digest"))
@@ -466,7 +494,8 @@ if __name__ == "__main__":
     log: bool = args.log
     dry_run: bool = args.dry_run
     cifar: bool = args.cifar
-    paper: bool = args.paper
+    paper_train: bool = args.paper_train
+    paper_model: bool = args.paper_model
     n_epoch: int = args.n_epoch
     early_stop: int = args.early_stop
     log_loss_step: int = args.log_loss_step
@@ -477,9 +506,15 @@ if __name__ == "__main__":
     assert dataset in (s:=["Cifar10", "Cifar100", "PascalVOC2012"]), f"{Fore.RED}Invalid Datasets, please select in {s}"
 
     if cifar:
-        network = CifarAlexNetPaper(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
+        if paper_model:
+            network = CifarAlexNetPaper(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
+        else:
+            network = CifarAlexNet(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
     else:
-        network = AlexNetPaper(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
+        if paper_model:
+            network = AlexNetPaper(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
+        else:
+            network = AlexNet(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
     
     trainer = Trainer(
         network=network, dataset=dataset, log=log, dry_run=dry_run,
@@ -488,7 +523,7 @@ if __name__ == "__main__":
         log_confusion_epoch=log_confusion_epoch
     )
 
-    if paper:
+    if paper_train:
         network = trainer.paper_train(
             n_epoch=n_epoch, early_stop=early_stop,
             message=messgae
