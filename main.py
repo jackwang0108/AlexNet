@@ -6,6 +6,7 @@ Notes:
         3. 使用decrease learning rate的时候，需要加载最优的模型
         4. decrease learning rate的时候，平原的判定需要稳定一些，可以利用一个队列
         5. 使用logger的时候最好写一个hook决定是print还是log
+        6. 写网络的时候多用用AvgPool2D
 """
 
 # Standard Library
@@ -23,6 +24,7 @@ import numpy as np
 from colorama import Fore, Style, init
 
 # My Library
+from network import AlexNetPaper, CifarAlexNetPaper
 from network import AlexNet, CifarAlexNet
 from datasets import MultiDataset
 from helper import ProjectPath, DatasetPath
@@ -60,7 +62,7 @@ class Trainer:
     ])
 
     def __init__(
-        self, network: AlexNet, dataset: str,
+        self, network: AlexNetPaper, dataset: str,
         log: Optional[bool] = True,
         dry_run: Optional[bool] = True,
         cifar: Optional[bool] = False,
@@ -75,7 +77,7 @@ class Trainer:
         self.cifar: bool = cifar
         self.log_loss_step: Union[None, int] = log_loss_step
         self.log_confusion_epoch: Union[None, int] = log_confusion_epoch
-        self.network: AlexNet = network.to(
+        self.network: AlexNetPaper = network.to(
             self.avaliable_device, non_blocking=True)
 
         # make file suffix
@@ -153,7 +155,7 @@ class Trainer:
         n_epoch: Optional[int] = 200,
         early_stop: Optional[int] = 30,
         message: Optional[str] = None
-    ) -> AlexNet:
+    ) -> AlexNetPaper:
         # log training digest
         self.logger.info(f"Training Digest: {message}")
         self.logger.info(f"AlexNet training with modern setup")
@@ -285,7 +287,7 @@ class Trainer:
         n_epoch: Optional[int] = 200,
         early_stop: Optional[int] = 30,
         message: Optional[str] = None
-    ) -> AlexNet:
+    ) -> AlexNetPaper:
         # log training digest
         self.logger.info("Start Training".center(200, "+"))
         self.logger.info(f"Training Digest: {message}")
@@ -422,7 +424,10 @@ class Trainer:
                     },
                     global_step=epoch
                 )
-            
+
+            # early stop
+            if early_stop_cnt >= early_stop:
+                self.logger.info(f"{Fore.MAGENTA}Early Stopped at epoch: {epoch}")
             # print confusion matrix
             # if self.log_confusion_epoch is not None and epoch % self.log_confusion_epoch == 0:
             #     table = val_evaluator.get_confusion(top=5, title=f"Top 5 Confusion Matrix of dataset {self.dataset}")
@@ -444,8 +449,8 @@ def parse_arg() -> argparse.Namespace:
     parser.add_argument("-l", "--log", dest="log", default=False, action="store_true", help=green("If save terminal output to log"))
     parser.add_argument("-c", "--cifar", dest="cifar", default=False, action="store_true", help=green("If use cifar modified network"))
     parser.add_argument("-p", "--paper", dest="paper", default=False, action="store_true", help=green("If train the network using paper setting"))
-    parser.add_argument("-ne", "--n_epoch", dest="n_epoch", type=Union[int, None], default=None, help=yellow("Set maximum training epoch of each task"))
-    parser.add_argument("-es", "--early_stop", dest="early_stop", type=int, default=250, help=yellow("Set maximum early stop epoch counts"))
+    parser.add_argument("-ne", "--n_epoch", dest="n_epoch", type=Union[int, None], default=250, help=yellow("Set maximum training epoch of each task"))
+    parser.add_argument("-es", "--early_stop", dest="early_stop", type=int, default=50, help=yellow("Set maximum early stop epoch counts"))
     parser.add_argument("-lls", "--log_loss_step", dest="log_loss_step", type=Union[int, None], default=100, help=yellow("Set log loss steps"))
     parser.add_argument("-lce", "--log_confusion_epoch", dest="log_confusion_epoch", type=int, default=10, help=yellow("Set log confusion matrix epochs"))
     parser.add_argument("-ds", "--dataset", dest="dataset", type=str, default="Cifar10", help=blue("Set training datasets"))
@@ -472,9 +477,9 @@ if __name__ == "__main__":
     assert dataset in (s:=["Cifar10", "Cifar100", "PascalVOC2012"]), f"{Fore.RED}Invalid Datasets, please select in {s}"
 
     if cifar:
-        network = CifarAlexNet(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
+        network = CifarAlexNetPaper(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
     else:
-        network = AlexNet(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
+        network = AlexNetPaper(predict_class=len(ClassLabelLookuper(datasets=dataset).cls))
     
     trainer = Trainer(
         network=network, dataset=dataset, log=log, dry_run=dry_run,
