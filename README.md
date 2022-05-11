@@ -20,6 +20,7 @@ Notes:
   I have tested both, and find the first way runs fast and achieves higher accuracy. So, I also write a `CifarAlexNet` which shifts the kernel size of the first convolution layers.
 - Training `PascalVOC2012` takes too much time since my poor GPU cannot support. I roughly run the `PascalVOC2012` about 100~200 epochs, and finding the accuracy can be further promoted to meet the result claimed in the paper.
 - Current version is V2 where I basically rewrite all the code, so, you can only pull the v2 branch and run the codes.
+- Since checkpoints are too large, I will not upload the results
 
 ## Findings
 
