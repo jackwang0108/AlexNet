@@ -109,7 +109,7 @@ class AlexNetPaper(nn.Module):
         )
         self.avg_pool = nn.AdaptiveMaxPool2d(output_size=(6, 6))
         self.linear1 = nn.Sequential(
-            nn.Linear(in_features=256 * 6 * 6),
+            nn.Linear(in_features=256 * 6 * 6, out_features=4096),
             nn.ReLU(),
             nn.Dropout(p=0.5)
         )
