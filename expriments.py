@@ -54,19 +54,29 @@ if __name__ == "__main__":
     EARLY_STOP = 50
 
     # train
-    run_idx = 0
-    for dataset in ["Cifar10", "Cifar100", "PascalVOC2012"]:
-        for paper_model in [False, True]:
-            for paper_train in [True, False]:
-                run_idx += 1
-                run(
-                    messgae=None,
-                    n_epoch=N_EPOCH,
-                    early_stop=EARLY_STOP,
-                    log=True,
-                    dry_run=False,
-                    cifar=True if dataset[0] == "C" else False,
-                    paper_train=paper_train,
-                    paper_model=paper_model,
-                    dataset=dataset
-                )
+    # run_idx = 0
+    # for dataset in ["Cifar10", "Cifar100", "PascalVOC2012"]:
+    #     for paper_model in [False, True]:
+    #         for paper_train in [True, False]:
+    #             run_idx += 1
+                # run(
+                #     messgae=None,
+                #     n_epoch=N_EPOCH,
+                #     early_stop=EARLY_STOP,
+                #     log=True,
+                #     dry_run=False,
+                #     cifar=True if dataset[0] == "C" else False,
+                #     paper_train=paper_train,
+                #     paper_model=paper_model,
+                #     dataset=dataset
+                # )
+    run(messgae=None,
+        n_epoch=N_EPOCH,
+        early_stop=EARLY_STOP,
+        log=True,
+        dry_run=False,
+        cifar=False,
+        paper_train=False,
+        paper_model=True,
+        dataset="PascalVOC2012"
+    )
