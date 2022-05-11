@@ -195,7 +195,7 @@ class Trainer:
             pin_memory=True
         )
         loss_func = nn.CrossEntropyLoss()
-        optimizer = optim.Adam(params=self.network.parameters(), lr=lr, weight_decay=5e-4)
+        optimizer = optim.SGD(params=self.network.parameters(), lr=lr, weight_decay=5e-4, momentum=0.9)
         self.logger.info(f"{Fore.GREEN}Optim: {optimizer.__class__.__name__}")
         optimizer.zero_grad()
 
@@ -252,15 +252,9 @@ class Trainer:
                     # inference
                     y_pred = self.network(x)
 
-                    # Warn: 要找一下两种方法衡量的差异在哪, 下面这样计算高了要将近10个点
-                    # Warn: 下面这样计算加上Adam优化器就实现了v1版本的性能
-                    # all_num += len(y)
-                    # acc_num += torch.sum(y == y_pred.argmax(dim=1))
-
                     # log
                     val_evaluator.record(y_pred=y_pred, y=y)
 
-            # self.logger.info(f"{Fore.BLUE}crude acc: {acc_num / all_num}")
             # early stop update
             new_acc = val_evaluator.acc
             # new top1 acc
@@ -542,6 +536,6 @@ if __name__ == "__main__":
         )
     else:
         network = trainer.modern_train(
-            lr=1e-4, n_epoch=n_epoch, early_stop=early_stop,
+            lr=1e-3, n_epoch=n_epoch, early_stop=early_stop,
             message=messgae
         )
