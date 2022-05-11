@@ -9,6 +9,7 @@ Notes:
         6. 写网络的时候多用用AvgPool2D
         7. 跑实验一定要用函数，不然最后无法退出
         8. 退出时候注意要用atexit，否则会由于builtin被释放导致很多函数用不了
+        9. 自己写的Classification Evaluator一定要在真实环境下测试
 """
 
 # Standard Library
@@ -171,6 +172,7 @@ class Trainer:
         # log training digest
         msg = "Start Training".center(os.get_terminal_size().columns, "+")
         self.logger.info(f"{Fore.GREEN}" + msg)
+        self.logger.info(f"{Fore.GREEN}Training Digest: {message}")
         self.logger.info(f"{Fore.GREEN}{self.network.__class__.__name__} training with modern setup")
         self.logger.info(f"{Fore.GREEN}lr: {lr}")
         self.logger.info(f"{Fore.GREEN}e_poech: {n_epoch}")
@@ -193,7 +195,7 @@ class Trainer:
             pin_memory=True
         )
         loss_func = nn.CrossEntropyLoss()
-        optimizer = optim.SGD(params=self.network.parameters(), lr=lr, weight_decay=5e-4, momentum=0.9)
+        optimizer = optim.Adam(params=self.network.parameters(), lr=lr, weight_decay=5e-4)
         self.logger.info(f"{Fore.GREEN}Optim: {optimizer.__class__.__name__}")
         optimizer.zero_grad()
 
@@ -251,13 +253,14 @@ class Trainer:
                     y_pred = self.network(x)
 
                     # Warn: 要找一下两种方法衡量的差异在哪, 下面这样计算高了要将近10个点
-                    all_num += len(y)
-                    acc_num += torch.sum(y == y_pred.argmax(dim=1))
+                    # Warn: 下面这样计算加上Adam优化器就实现了v1版本的性能
+                    # all_num += len(y)
+                    # acc_num += torch.sum(y == y_pred.argmax(dim=1))
 
                     # log
                     val_evaluator.record(y_pred=y_pred, y=y)
 
-            self.logger.info(f"{Fore.BLUE}crude acc: {acc_num / all_num}")
+            # self.logger.info(f"{Fore.BLUE}crude acc: {acc_num / all_num}")
             # early stop update
             new_acc = val_evaluator.acc
             # new top1 acc
@@ -318,11 +321,11 @@ class Trainer:
         # log training digest
         msg = "Start Training".center(os.get_terminal_size().columns, "+")
         self.logger.info(f"{Fore.GREEN}" + msg)
-        self.logger.info(f"Training Digest: {message}")
-        self.logger.info(f"AlexNet training with paper setup")
-        self.logger.info(f"e_poech: {n_epoch}")
-        self.logger.info(f"early_stop: {early_stop}")
-        self.logger.info(f"datasets: {self.train_ds.dataset}")
+        self.logger.info(f"{Fore.GREEN}Training Digest: {message}")
+        self.logger.info(f"{Fore.GREEN}AlexNet training with paper setup")
+        self.logger.info(f"{Fore.GREEN}e_poech: {n_epoch}")
+        self.logger.info(f"{Fore.GREEN}early_stop: {early_stop}")
+        self.logger.info(f"{Fore.GREEN}datasets: {self.train_ds.dataset}")
         
 
         # detect anomaly

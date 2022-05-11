@@ -128,13 +128,14 @@ class ClassificationEvaluator:
     
     def record(self, y_pred: torch.Tensor, y: torch.Tensor) -> None:
         y = y.detach().cpu().numpy()
-        y_pred = y_pred.detach().cpu().numpy()
+        y_pred = y_pred.detach().cpu().topk(k=5, dim=1, largest=True, sorted=True)[1].numpy()
 
         # get valid examples
         k = (y >= 0) & (y < len(self.cls))
 
         # get top 5 predictions
-        y_pred = np.argpartition(y_pred, kth=-5, axis=1)[:, -5:][:, ::-1]
+        # Warn 下面这句话计算的有问题, 直接使用torch.topk计算
+        # y_pred = np.argpartition(y_pred, kth=-5, axis=1)[:, -5:][:, ::-1]
 
         # get top 1 confusion matrix of the batch
         top1_cm = np.bincount(
