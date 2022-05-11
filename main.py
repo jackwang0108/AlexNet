@@ -193,7 +193,7 @@ class Trainer:
             pin_memory=True
         )
         loss_func = nn.CrossEntropyLoss()
-        optimizer = optim.SGD(params=self.network.parameters(), lr=lr)
+        optimizer = optim.SGD(params=self.network.parameters(), lr=lr, weight_decay=5e-4, momentum=0.9)
         self.logger.info(f"{Fore.GREEN}Optim: {optimizer.__class__.__name__}")
         optimizer.zero_grad()
 
@@ -206,6 +206,7 @@ class Trainer:
         # typing
         x: torch.Tensor
         y: torch.Tensor
+        y_pred: torch.Tensor
         loss: torch.Tensor
 
         # train network
@@ -239,6 +240,8 @@ class Trainer:
 
             # val
             self.network.eval()
+            all_num = 0
+            acc_num = 0
             with torch.no_grad():
                 for step, (x, y) in enumerate(val_loader):
                     x = x.to(device=self.avaliable_device, dtype=self.default_dtype, non_blocking=True)
@@ -247,9 +250,14 @@ class Trainer:
                     # inference
                     y_pred = self.network(x)
 
+                    # Warn: 要找一下两种方法衡量的差异在哪, 下面这样计算高了要将近10个点
+                    all_num += len(y)
+                    acc_num += torch.sum(y == y_pred.argmax(dim=1))
+
                     # log
                     val_evaluator.record(y_pred=y_pred, y=y)
-            
+
+            self.logger.info(f"{Fore.BLUE}crude acc: {acc_num / all_num}")
             # early stop update
             new_acc = val_evaluator.acc
             # new top1 acc
@@ -400,7 +408,8 @@ class Trainer:
                 early_stop_cnt = 0
                 max_top1 = new_acc[0]
                 max_top5 = new_acc[1]
-                last_best_epoch.append(epoch)
+                last_best_epoch.extend([epoch] * 4)
+                plateau_cnt = 0
                 self.logger.info(
                     f"{Fore.YELLOW}Dataset: {self.dataset}, Epoch: [{epoch:>{ne_digits}}|{n_epoch}], "\
                     f"new top1 Acc: {Style.BRIGHT}{new_acc[0]:>.5f}{Style.NORMAL}, with top5 Acc:{new_acc[1]:>.5f}, "\
