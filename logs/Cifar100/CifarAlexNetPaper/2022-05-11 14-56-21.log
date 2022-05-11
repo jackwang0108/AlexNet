@@ -1,0 +1,499 @@
+Training curves can be found in runs/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21
+Save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Start Training+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Training Digest: Run command: /home/jack/miniconda3/envs/torch/bin/python /home/jack/projects/AlexNet/main.py -l -c -pm -ne 200 -es 50 -lls 100 -lce 10 -ds Cifar100 
+CifarAlexNetPaper training with modern setup
+lr: 0.0001
+e_poech: 200
+early_stop: 50
+datasets: Cifar100
+Optim: Adam
+Dataset: Cifar100, Epoch: [  0|200], step: 0, loss: 4.60467
+Dataset: Cifar100, Epoch: [  0|200], step: 100, loss: 4.44209
+Dataset: Cifar100, Epoch: [  0|200], step: 200, loss: 4.31051
+Dataset: Cifar100, Epoch: [  0|200], step: 300, loss: 4.25875
+Dataset: Cifar100, Epoch: [  0|200], new top1 Acc: 0.03970, top5 Acc:0.15810
+Dataset: Cifar100, Epoch: [  0|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [  1|200], step: 0, loss: 4.15123
+Dataset: Cifar100, Epoch: [  1|200], step: 100, loss: 4.12438
+Dataset: Cifar100, Epoch: [  1|200], step: 200, loss: 4.05460
+Dataset: Cifar100, Epoch: [  1|200], step: 300, loss: 3.96551
+Dataset: Cifar100, Epoch: [  1|200], new top1 Acc: 0.05860, top5 Acc:0.23690
+Dataset: Cifar100, Epoch: [  1|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [  2|200], step: 0, loss: 3.95475
+Dataset: Cifar100, Epoch: [  2|200], step: 100, loss: 3.89023
+Dataset: Cifar100, Epoch: [  2|200], step: 200, loss: 3.68768
+Dataset: Cifar100, Epoch: [  2|200], step: 300, loss: 3.76740
+Dataset: Cifar100, Epoch: [  2|200], new top1 Acc: 0.10910, top5 Acc:0.34350
+Dataset: Cifar100, Epoch: [  2|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [  3|200], step: 0, loss: 3.57385
+Dataset: Cifar100, Epoch: [  3|200], step: 100, loss: 3.58140
+Dataset: Cifar100, Epoch: [  3|200], step: 200, loss: 3.51960
+Dataset: Cifar100, Epoch: [  3|200], step: 300, loss: 3.53172
+Dataset: Cifar100, Epoch: [  3|200], new top1 Acc: 0.14400, top5 Acc:0.40670
+Dataset: Cifar100, Epoch: [  3|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [  4|200], step: 0, loss: 3.57129
+Dataset: Cifar100, Epoch: [  4|200], step: 100, loss: 3.33163
+Dataset: Cifar100, Epoch: [  4|200], step: 200, loss: 3.39339
+Dataset: Cifar100, Epoch: [  4|200], step: 300, loss: 3.16948
+Dataset: Cifar100, Epoch: [  4|200], new top1 Acc: 0.18510, top5 Acc:0.48670
+Dataset: Cifar100, Epoch: [  4|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [  5|200], step: 0, loss: 3.30162
+Dataset: Cifar100, Epoch: [  5|200], step: 100, loss: 3.05166
+Dataset: Cifar100, Epoch: [  5|200], step: 200, loss: 3.15606
+Dataset: Cifar100, Epoch: [  5|200], step: 300, loss: 3.11641
+Dataset: Cifar100, Epoch: [  5|200], new top1 Acc: 0.21960, top5 Acc:0.52770
+Dataset: Cifar100, Epoch: [  5|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [  6|200], step: 0, loss: 3.23019
+Dataset: Cifar100, Epoch: [  6|200], step: 100, loss: 2.93073
+Dataset: Cifar100, Epoch: [  6|200], step: 200, loss: 3.09084
+Dataset: Cifar100, Epoch: [  6|200], step: 300, loss: 3.45362
+Dataset: Cifar100, Epoch: [  6|200], new top1 Acc: 0.24480, top5 Acc:0.55540
+Dataset: Cifar100, Epoch: [  6|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [  7|200], step: 0, loss: 2.83403
+Dataset: Cifar100, Epoch: [  7|200], step: 100, loss: 2.94982
+Dataset: Cifar100, Epoch: [  7|200], step: 200, loss: 2.90023
+Dataset: Cifar100, Epoch: [  7|200], step: 300, loss: 2.96036
+Dataset: Cifar100, Epoch: [  7|200], new top1 Acc: 0.26980, top5 Acc:0.58060
+Dataset: Cifar100, Epoch: [  7|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [  8|200], step: 0, loss: 2.47649
+Dataset: Cifar100, Epoch: [  8|200], step: 100, loss: 2.83538
+Dataset: Cifar100, Epoch: [  8|200], step: 200, loss: 2.73301
+Dataset: Cifar100, Epoch: [  8|200], step: 300, loss: 2.56970
+Dataset: Cifar100, Epoch: [  8|200], new top1 Acc: 0.29470, top5 Acc:0.60430
+Dataset: Cifar100, Epoch: [  8|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [  9|200], step: 0, loss: 2.47403
+Dataset: Cifar100, Epoch: [  9|200], step: 100, loss: 2.57370
+Dataset: Cifar100, Epoch: [  9|200], step: 200, loss: 2.65646
+Dataset: Cifar100, Epoch: [  9|200], step: 300, loss: 2.59656
+Dataset: Cifar100, Epoch: [  9|200], new top1 Acc: 0.31700, top5 Acc:0.62980
+Dataset: Cifar100, Epoch: [  9|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 10|200], step: 0, loss: 2.72338
+Dataset: Cifar100, Epoch: [ 10|200], step: 100, loss: 2.37781
+Dataset: Cifar100, Epoch: [ 10|200], step: 200, loss: 2.67481
+Dataset: Cifar100, Epoch: [ 10|200], step: 300, loss: 2.59795
+Dataset: Cifar100, Epoch: [ 10|200], new top1 Acc: 0.32640, top5 Acc:0.64710
+Dataset: Cifar100, Epoch: [ 10|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 11|200], step: 0, loss: 2.57758
+Dataset: Cifar100, Epoch: [ 11|200], step: 100, loss: 2.79339
+Dataset: Cifar100, Epoch: [ 11|200], step: 200, loss: 2.23139
+Dataset: Cifar100, Epoch: [ 11|200], step: 300, loss: 2.40947
+Dataset: Cifar100, Epoch: [ 11|200], new top1 Acc: 0.33040, top5 Acc:0.64380
+Dataset: Cifar100, Epoch: [ 11|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 12|200], step: 0, loss: 2.31138
+Dataset: Cifar100, Epoch: [ 12|200], step: 100, loss: 2.27228
+Dataset: Cifar100, Epoch: [ 12|200], step: 200, loss: 2.41380
+Dataset: Cifar100, Epoch: [ 12|200], step: 300, loss: 2.12766
+Dataset: Cifar100, Epoch: [ 12|200], new top1 Acc: 0.36570, top5 Acc:0.67560
+Dataset: Cifar100, Epoch: [ 12|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 13|200], step: 0, loss: 2.07616
+Dataset: Cifar100, Epoch: [ 13|200], step: 100, loss: 2.34320
+Dataset: Cifar100, Epoch: [ 13|200], step: 200, loss: 2.16561
+Dataset: Cifar100, Epoch: [ 13|200], step: 300, loss: 1.89709
+Dataset: Cifar100, Epoch: [ 13|200], new top1 Acc: 0.37110, top5 Acc:0.68750
+Dataset: Cifar100, Epoch: [ 13|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 14|200], step: 0, loss: 2.32234
+Dataset: Cifar100, Epoch: [ 14|200], step: 100, loss: 2.05104
+Dataset: Cifar100, Epoch: [ 14|200], step: 200, loss: 1.93371
+Dataset: Cifar100, Epoch: [ 14|200], step: 300, loss: 2.35078
+Dataset: Cifar100, Epoch: [ 14|200], new top1 Acc: 0.38180, top5 Acc:0.69440
+Dataset: Cifar100, Epoch: [ 14|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 15|200], step: 0, loss: 1.90541
+Dataset: Cifar100, Epoch: [ 15|200], step: 100, loss: 2.28352
+Dataset: Cifar100, Epoch: [ 15|200], step: 200, loss: 1.91288
+Dataset: Cifar100, Epoch: [ 15|200], step: 300, loss: 2.01378
+Dataset: Cifar100, Epoch: [ 15|200], new top1 Acc: 0.39030, top5 Acc:0.71110
+Dataset: Cifar100, Epoch: [ 15|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 16|200], step: 0, loss: 1.80963
+Dataset: Cifar100, Epoch: [ 16|200], step: 100, loss: 2.00344
+Dataset: Cifar100, Epoch: [ 16|200], step: 200, loss: 2.00575
+Dataset: Cifar100, Epoch: [ 16|200], step: 300, loss: 1.89253
+Dataset: Cifar100, Epoch: [ 16|200], new top1 Acc: 0.39830, top5 Acc:0.71730
+Dataset: Cifar100, Epoch: [ 16|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 17|200], step: 0, loss: 2.06233
+Dataset: Cifar100, Epoch: [ 17|200], step: 100, loss: 2.06827
+Dataset: Cifar100, Epoch: [ 17|200], step: 200, loss: 1.95765
+Dataset: Cifar100, Epoch: [ 17|200], step: 300, loss: 2.05586
+Dataset: Cifar100, Epoch: [ 17|200], new top1 Acc: 0.40190, top5 Acc:0.71430
+Dataset: Cifar100, Epoch: [ 17|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 18|200], step: 0, loss: 1.75315
+Dataset: Cifar100, Epoch: [ 18|200], step: 100, loss: 1.85630
+Dataset: Cifar100, Epoch: [ 18|200], step: 200, loss: 1.74062
+Dataset: Cifar100, Epoch: [ 18|200], step: 300, loss: 2.08697
+Dataset: Cifar100, Epoch: [ 18|200], top1 Acc: [0.397400|0.40190], top5 Acc: [0.706300] early_stop_cnt: [ 1|50]
+Dataset: Cifar100, Epoch: [ 19|200], step: 0, loss: 1.88619
+Dataset: Cifar100, Epoch: [ 19|200], step: 100, loss: 1.66881
+Dataset: Cifar100, Epoch: [ 19|200], step: 200, loss: 1.57094
+Dataset: Cifar100, Epoch: [ 19|200], step: 300, loss: 2.02204
+Dataset: Cifar100, Epoch: [ 19|200], new top1 Acc: 0.41950, top5 Acc:0.73210
+Dataset: Cifar100, Epoch: [ 19|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 20|200], step: 0, loss: 1.71736
+Dataset: Cifar100, Epoch: [ 20|200], step: 100, loss: 1.88246
+Dataset: Cifar100, Epoch: [ 20|200], step: 200, loss: 1.79870
+Dataset: Cifar100, Epoch: [ 20|200], step: 300, loss: 1.84902
+Dataset: Cifar100, Epoch: [ 20|200], top1 Acc: [0.408600|0.41950], top5 Acc: [0.712200] early_stop_cnt: [ 1|50]
+Dataset: Cifar100, Epoch: [ 21|200], step: 0, loss: 1.86060
+Dataset: Cifar100, Epoch: [ 21|200], step: 100, loss: 1.97677
+Dataset: Cifar100, Epoch: [ 21|200], step: 200, loss: 1.63323
+Dataset: Cifar100, Epoch: [ 21|200], step: 300, loss: 1.77298
+Dataset: Cifar100, Epoch: [ 21|200], new top1 Acc: 0.42720, top5 Acc:0.72950
+Dataset: Cifar100, Epoch: [ 21|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 22|200], step: 0, loss: 1.88727
+Dataset: Cifar100, Epoch: [ 22|200], step: 100, loss: 1.75816
+Dataset: Cifar100, Epoch: [ 22|200], step: 200, loss: 1.77332
+Dataset: Cifar100, Epoch: [ 22|200], step: 300, loss: 1.38086
+Dataset: Cifar100, Epoch: [ 22|200], new top1 Acc: 0.43200, top5 Acc:0.73640
+Dataset: Cifar100, Epoch: [ 22|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 23|200], step: 0, loss: 1.38924
+Dataset: Cifar100, Epoch: [ 23|200], step: 100, loss: 1.59198
+Dataset: Cifar100, Epoch: [ 23|200], step: 200, loss: 1.59341
+Dataset: Cifar100, Epoch: [ 23|200], step: 300, loss: 1.62552
+Dataset: Cifar100, Epoch: [ 23|200], new top1 Acc: 0.43620, top5 Acc:0.74050
+Dataset: Cifar100, Epoch: [ 23|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 24|200], step: 0, loss: 1.52199
+Dataset: Cifar100, Epoch: [ 24|200], step: 100, loss: 1.50922
+Dataset: Cifar100, Epoch: [ 24|200], step: 200, loss: 1.52633
+Dataset: Cifar100, Epoch: [ 24|200], step: 300, loss: 1.60592
+Dataset: Cifar100, Epoch: [ 24|200], top1 Acc: [0.430600|0.43620], top5 Acc: [0.734200] early_stop_cnt: [ 1|50]
+Dataset: Cifar100, Epoch: [ 25|200], step: 0, loss: 1.74637
+Dataset: Cifar100, Epoch: [ 25|200], step: 100, loss: 1.52847
+Dataset: Cifar100, Epoch: [ 25|200], step: 200, loss: 1.37483
+Dataset: Cifar100, Epoch: [ 25|200], step: 300, loss: 1.35732
+Dataset: Cifar100, Epoch: [ 25|200], top1 Acc: [0.432200|0.43620], top5 Acc: [0.741300] early_stop_cnt: [ 2|50]
+Dataset: Cifar100, Epoch: [ 26|200], step: 0, loss: 1.51734
+Dataset: Cifar100, Epoch: [ 26|200], step: 100, loss: 1.29560
+Dataset: Cifar100, Epoch: [ 26|200], step: 200, loss: 1.47104
+Dataset: Cifar100, Epoch: [ 26|200], step: 300, loss: 1.15748
+Dataset: Cifar100, Epoch: [ 26|200], new top1 Acc: 0.43970, top5 Acc:0.73650
+Dataset: Cifar100, Epoch: [ 26|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 27|200], step: 0, loss: 1.45723
+Dataset: Cifar100, Epoch: [ 27|200], step: 100, loss: 1.41027
+Dataset: Cifar100, Epoch: [ 27|200], step: 200, loss: 1.39442
+Dataset: Cifar100, Epoch: [ 27|200], step: 300, loss: 1.29635
+Dataset: Cifar100, Epoch: [ 27|200], new top1 Acc: 0.44140, top5 Acc:0.73950
+Dataset: Cifar100, Epoch: [ 27|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 28|200], step: 0, loss: 1.32384
+Dataset: Cifar100, Epoch: [ 28|200], step: 100, loss: 1.24519
+Dataset: Cifar100, Epoch: [ 28|200], step: 200, loss: 1.48739
+Dataset: Cifar100, Epoch: [ 28|200], step: 300, loss: 1.55200
+Dataset: Cifar100, Epoch: [ 28|200], new top1 Acc: 0.44780, top5 Acc:0.74960
+Dataset: Cifar100, Epoch: [ 28|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 29|200], step: 0, loss: 1.10611
+Dataset: Cifar100, Epoch: [ 29|200], step: 100, loss: 1.26898
+Dataset: Cifar100, Epoch: [ 29|200], step: 200, loss: 1.25956
+Dataset: Cifar100, Epoch: [ 29|200], step: 300, loss: 1.20372
+Dataset: Cifar100, Epoch: [ 29|200], new top1 Acc: 0.45120, top5 Acc:0.74240
+Dataset: Cifar100, Epoch: [ 29|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 30|200], step: 0, loss: 0.94259
+Dataset: Cifar100, Epoch: [ 30|200], step: 100, loss: 1.20357
+Dataset: Cifar100, Epoch: [ 30|200], step: 200, loss: 1.28143
+Dataset: Cifar100, Epoch: [ 30|200], step: 300, loss: 1.31337
+Dataset: Cifar100, Epoch: [ 30|200], top1 Acc: [0.450000|0.45120], top5 Acc: [0.740700] early_stop_cnt: [ 1|50]
+Dataset: Cifar100, Epoch: [ 31|200], step: 0, loss: 1.20671
+Dataset: Cifar100, Epoch: [ 31|200], step: 100, loss: 1.12495
+Dataset: Cifar100, Epoch: [ 31|200], step: 200, loss: 1.12956
+Dataset: Cifar100, Epoch: [ 31|200], step: 300, loss: 1.18825
+Dataset: Cifar100, Epoch: [ 31|200], top1 Acc: [0.442700|0.45120], top5 Acc: [0.737500] early_stop_cnt: [ 2|50]
+Dataset: Cifar100, Epoch: [ 32|200], step: 0, loss: 1.02138
+Dataset: Cifar100, Epoch: [ 32|200], step: 100, loss: 1.05923
+Dataset: Cifar100, Epoch: [ 32|200], step: 200, loss: 1.46486
+Dataset: Cifar100, Epoch: [ 32|200], step: 300, loss: 1.15979
+Dataset: Cifar100, Epoch: [ 32|200], new top1 Acc: 0.45150, top5 Acc:0.74750
+Dataset: Cifar100, Epoch: [ 32|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 33|200], step: 0, loss: 1.28047
+Dataset: Cifar100, Epoch: [ 33|200], step: 100, loss: 1.34991
+Dataset: Cifar100, Epoch: [ 33|200], step: 200, loss: 1.16301
+Dataset: Cifar100, Epoch: [ 33|200], step: 300, loss: 1.18908
+Dataset: Cifar100, Epoch: [ 33|200], top1 Acc: [0.449500|0.45150], top5 Acc: [0.740300] early_stop_cnt: [ 1|50]
+Dataset: Cifar100, Epoch: [ 34|200], step: 0, loss: 1.08038
+Dataset: Cifar100, Epoch: [ 34|200], step: 100, loss: 0.98449
+Dataset: Cifar100, Epoch: [ 34|200], step: 200, loss: 1.04353
+Dataset: Cifar100, Epoch: [ 34|200], step: 300, loss: 1.09743
+Dataset: Cifar100, Epoch: [ 34|200], top1 Acc: [0.443800|0.45150], top5 Acc: [0.732600] early_stop_cnt: [ 2|50]
+Dataset: Cifar100, Epoch: [ 35|200], step: 0, loss: 1.20240
+Dataset: Cifar100, Epoch: [ 35|200], step: 100, loss: 0.96054
+Dataset: Cifar100, Epoch: [ 35|200], step: 200, loss: 1.05504
+Dataset: Cifar100, Epoch: [ 35|200], step: 300, loss: 0.76281
+Dataset: Cifar100, Epoch: [ 35|200], new top1 Acc: 0.45420, top5 Acc:0.74370
+Dataset: Cifar100, Epoch: [ 35|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 36|200], step: 0, loss: 1.05810
+Dataset: Cifar100, Epoch: [ 36|200], step: 100, loss: 0.85034
+Dataset: Cifar100, Epoch: [ 36|200], step: 200, loss: 0.96239
+Dataset: Cifar100, Epoch: [ 36|200], step: 300, loss: 0.95637
+Dataset: Cifar100, Epoch: [ 36|200], top1 Acc: [0.452800|0.45420], top5 Acc: [0.743400] early_stop_cnt: [ 1|50]
+Dataset: Cifar100, Epoch: [ 37|200], step: 0, loss: 0.77612
+Dataset: Cifar100, Epoch: [ 37|200], step: 100, loss: 0.96541
+Dataset: Cifar100, Epoch: [ 37|200], step: 200, loss: 0.79032
+Dataset: Cifar100, Epoch: [ 37|200], step: 300, loss: 0.95219
+Dataset: Cifar100, Epoch: [ 37|200], top1 Acc: [0.443500|0.45420], top5 Acc: [0.735600] early_stop_cnt: [ 2|50]
+Dataset: Cifar100, Epoch: [ 38|200], step: 0, loss: 0.98117
+Dataset: Cifar100, Epoch: [ 38|200], step: 100, loss: 0.83011
+Dataset: Cifar100, Epoch: [ 38|200], step: 200, loss: 0.91500
+Dataset: Cifar100, Epoch: [ 38|200], step: 300, loss: 0.89477
+Dataset: Cifar100, Epoch: [ 38|200], top1 Acc: [0.452000|0.45420], top5 Acc: [0.743900] early_stop_cnt: [ 3|50]
+Dataset: Cifar100, Epoch: [ 39|200], step: 0, loss: 0.75239
+Dataset: Cifar100, Epoch: [ 39|200], step: 100, loss: 0.75812
+Dataset: Cifar100, Epoch: [ 39|200], step: 200, loss: 1.05816
+Dataset: Cifar100, Epoch: [ 39|200], step: 300, loss: 1.04742
+Dataset: Cifar100, Epoch: [ 39|200], new top1 Acc: 0.45450, top5 Acc:0.74410
+Dataset: Cifar100, Epoch: [ 39|200], save checkpoint to checkpoints/Cifar100/CifarAlexNetPaper/2022-05-11 14-56-21/best.pt
+Dataset: Cifar100, Epoch: [ 40|200], step: 0, loss: 0.75106
+Dataset: Cifar100, Epoch: [ 40|200], step: 100, loss: 0.71358
+Dataset: Cifar100, Epoch: [ 40|200], step: 200, loss: 0.72293
+Dataset: Cifar100, Epoch: [ 40|200], step: 300, loss: 1.04799
+Dataset: Cifar100, Epoch: [ 40|200], top1 Acc: [0.442700|0.45450], top5 Acc: [0.731400] early_stop_cnt: [ 1|50]
+Dataset: Cifar100, Epoch: [ 41|200], step: 0, loss: 0.68318
+Dataset: Cifar100, Epoch: [ 41|200], step: 100, loss: 0.91497
+Dataset: Cifar100, Epoch: [ 41|200], step: 200, loss: 0.94046
+Dataset: Cifar100, Epoch: [ 41|200], step: 300, loss: 0.98823
+Dataset: Cifar100, Epoch: [ 41|200], top1 Acc: [0.448500|0.45450], top5 Acc: [0.740300] early_stop_cnt: [ 2|50]
+Dataset: Cifar100, Epoch: [ 42|200], step: 0, loss: 0.75569
+Dataset: Cifar100, Epoch: [ 42|200], step: 100, loss: 0.61715
+Dataset: Cifar100, Epoch: [ 42|200], step: 200, loss: 0.76731
+Dataset: Cifar100, Epoch: [ 42|200], step: 300, loss: 0.73139
+Dataset: Cifar100, Epoch: [ 42|200], top1 Acc: [0.442100|0.45450], top5 Acc: [0.738200] early_stop_cnt: [ 3|50]
+Dataset: Cifar100, Epoch: [ 43|200], step: 0, loss: 0.55524
+Dataset: Cifar100, Epoch: [ 43|200], step: 100, loss: 0.89998
+Dataset: Cifar100, Epoch: [ 43|200], step: 200, loss: 0.72192
+Dataset: Cifar100, Epoch: [ 43|200], step: 300, loss: 0.92676
+Dataset: Cifar100, Epoch: [ 43|200], top1 Acc: [0.450700|0.45450], top5 Acc: [0.737800] early_stop_cnt: [ 4|50]
+Dataset: Cifar100, Epoch: [ 44|200], step: 0, loss: 0.67100
+Dataset: Cifar100, Epoch: [ 44|200], step: 100, loss: 0.72168
+Dataset: Cifar100, Epoch: [ 44|200], step: 200, loss: 0.46061
+Dataset: Cifar100, Epoch: [ 44|200], step: 300, loss: 0.82682
+Dataset: Cifar100, Epoch: [ 44|200], top1 Acc: [0.452700|0.45450], top5 Acc: [0.738300] early_stop_cnt: [ 5|50]
+Dataset: Cifar100, Epoch: [ 45|200], step: 0, loss: 0.45410
+Dataset: Cifar100, Epoch: [ 45|200], step: 100, loss: 0.64702
+Dataset: Cifar100, Epoch: [ 45|200], step: 200, loss: 0.64650
+Dataset: Cifar100, Epoch: [ 45|200], step: 300, loss: 0.46919
+Dataset: Cifar100, Epoch: [ 45|200], top1 Acc: [0.446800|0.45450], top5 Acc: [0.735000] early_stop_cnt: [ 6|50]
+Dataset: Cifar100, Epoch: [ 46|200], step: 0, loss: 0.53872
+Dataset: Cifar100, Epoch: [ 46|200], step: 100, loss: 0.68716
+Dataset: Cifar100, Epoch: [ 46|200], step: 200, loss: 0.84394
+Dataset: Cifar100, Epoch: [ 46|200], step: 300, loss: 0.70711
+Dataset: Cifar100, Epoch: [ 46|200], top1 Acc: [0.451600|0.45450], top5 Acc: [0.737600] early_stop_cnt: [ 7|50]
+Dataset: Cifar100, Epoch: [ 47|200], step: 0, loss: 0.59493
+Dataset: Cifar100, Epoch: [ 47|200], step: 100, loss: 0.58574
+Dataset: Cifar100, Epoch: [ 47|200], step: 200, loss: 0.59591
+Dataset: Cifar100, Epoch: [ 47|200], step: 300, loss: 0.56149
+Dataset: Cifar100, Epoch: [ 47|200], top1 Acc: [0.452500|0.45450], top5 Acc: [0.730300] early_stop_cnt: [ 8|50]
+Dataset: Cifar100, Epoch: [ 48|200], step: 0, loss: 0.55182
+Dataset: Cifar100, Epoch: [ 48|200], step: 100, loss: 0.67314
+Dataset: Cifar100, Epoch: [ 48|200], step: 200, loss: 0.60735
+Dataset: Cifar100, Epoch: [ 48|200], step: 300, loss: 0.49224
+Dataset: Cifar100, Epoch: [ 48|200], top1 Acc: [0.445400|0.45450], top5 Acc: [0.740900] early_stop_cnt: [ 9|50]
+Dataset: Cifar100, Epoch: [ 49|200], step: 0, loss: 0.78754
+Dataset: Cifar100, Epoch: [ 49|200], step: 100, loss: 0.53158
+Dataset: Cifar100, Epoch: [ 49|200], step: 200, loss: 0.52109
+Dataset: Cifar100, Epoch: [ 49|200], step: 300, loss: 0.53594
+Dataset: Cifar100, Epoch: [ 49|200], top1 Acc: [0.449200|0.45450], top5 Acc: [0.730800] early_stop_cnt: [10|50]
+Dataset: Cifar100, Epoch: [ 50|200], step: 0, loss: 0.67785
+Dataset: Cifar100, Epoch: [ 50|200], step: 100, loss: 0.47205
+Dataset: Cifar100, Epoch: [ 50|200], step: 200, loss: 0.56443
+Dataset: Cifar100, Epoch: [ 50|200], step: 300, loss: 0.50787
+Dataset: Cifar100, Epoch: [ 50|200], top1 Acc: [0.446500|0.45450], top5 Acc: [0.729700] early_stop_cnt: [11|50]
+Dataset: Cifar100, Epoch: [ 51|200], step: 0, loss: 0.50321
+Dataset: Cifar100, Epoch: [ 51|200], step: 100, loss: 0.72386
+Dataset: Cifar100, Epoch: [ 51|200], step: 200, loss: 0.75238
+Dataset: Cifar100, Epoch: [ 51|200], step: 300, loss: 0.59272
+Dataset: Cifar100, Epoch: [ 51|200], top1 Acc: [0.449500|0.45450], top5 Acc: [0.729900] early_stop_cnt: [12|50]
+Dataset: Cifar100, Epoch: [ 52|200], step: 0, loss: 0.49324
+Dataset: Cifar100, Epoch: [ 52|200], step: 100, loss: 0.60829
+Dataset: Cifar100, Epoch: [ 52|200], step: 200, loss: 0.46214
+Dataset: Cifar100, Epoch: [ 52|200], step: 300, loss: 0.59885
+Dataset: Cifar100, Epoch: [ 52|200], top1 Acc: [0.450000|0.45450], top5 Acc: [0.729400] early_stop_cnt: [13|50]
+Dataset: Cifar100, Epoch: [ 53|200], step: 0, loss: 0.33908
+Dataset: Cifar100, Epoch: [ 53|200], step: 100, loss: 0.43923
+Dataset: Cifar100, Epoch: [ 53|200], step: 200, loss: 0.49174
+Dataset: Cifar100, Epoch: [ 53|200], step: 300, loss: 0.47678
+Dataset: Cifar100, Epoch: [ 53|200], top1 Acc: [0.436900|0.45450], top5 Acc: [0.715400] early_stop_cnt: [14|50]
+Dataset: Cifar100, Epoch: [ 54|200], step: 0, loss: 0.44205
+Dataset: Cifar100, Epoch: [ 54|200], step: 100, loss: 0.49710
+Dataset: Cifar100, Epoch: [ 54|200], step: 200, loss: 0.44209
+Dataset: Cifar100, Epoch: [ 54|200], step: 300, loss: 0.45890
+Dataset: Cifar100, Epoch: [ 54|200], top1 Acc: [0.440000|0.45450], top5 Acc: [0.718600] early_stop_cnt: [15|50]
+Dataset: Cifar100, Epoch: [ 55|200], step: 0, loss: 0.45599
+Dataset: Cifar100, Epoch: [ 55|200], step: 100, loss: 0.36496
+Dataset: Cifar100, Epoch: [ 55|200], step: 200, loss: 0.44345
+Dataset: Cifar100, Epoch: [ 55|200], step: 300, loss: 0.30649
+Dataset: Cifar100, Epoch: [ 55|200], top1 Acc: [0.445900|0.45450], top5 Acc: [0.727200] early_stop_cnt: [16|50]
+Dataset: Cifar100, Epoch: [ 56|200], step: 0, loss: 0.35475
+Dataset: Cifar100, Epoch: [ 56|200], step: 100, loss: 0.49610
+Dataset: Cifar100, Epoch: [ 56|200], step: 200, loss: 0.26849
+Dataset: Cifar100, Epoch: [ 56|200], step: 300, loss: 0.63090
+Dataset: Cifar100, Epoch: [ 56|200], top1 Acc: [0.435700|0.45450], top5 Acc: [0.718800] early_stop_cnt: [17|50]
+Dataset: Cifar100, Epoch: [ 57|200], step: 0, loss: 0.31142
+Dataset: Cifar100, Epoch: [ 57|200], step: 100, loss: 0.32692
+Dataset: Cifar100, Epoch: [ 57|200], step: 200, loss: 0.48973
+Dataset: Cifar100, Epoch: [ 57|200], step: 300, loss: 0.38898
+Dataset: Cifar100, Epoch: [ 57|200], top1 Acc: [0.444500|0.45450], top5 Acc: [0.723000] early_stop_cnt: [18|50]
+Dataset: Cifar100, Epoch: [ 58|200], step: 0, loss: 0.32190
+Dataset: Cifar100, Epoch: [ 58|200], step: 100, loss: 0.21121
+Dataset: Cifar100, Epoch: [ 58|200], step: 200, loss: 0.42116
+Dataset: Cifar100, Epoch: [ 58|200], step: 300, loss: 0.47197
+Dataset: Cifar100, Epoch: [ 58|200], top1 Acc: [0.450200|0.45450], top5 Acc: [0.723200] early_stop_cnt: [19|50]
+Dataset: Cifar100, Epoch: [ 59|200], step: 0, loss: 0.35186
+Dataset: Cifar100, Epoch: [ 59|200], step: 100, loss: 0.34118
+Dataset: Cifar100, Epoch: [ 59|200], step: 200, loss: 0.32867
+Dataset: Cifar100, Epoch: [ 59|200], step: 300, loss: 0.35436
+Dataset: Cifar100, Epoch: [ 59|200], top1 Acc: [0.446100|0.45450], top5 Acc: [0.724100] early_stop_cnt: [20|50]
+Dataset: Cifar100, Epoch: [ 60|200], step: 0, loss: 0.27758
+Dataset: Cifar100, Epoch: [ 60|200], step: 100, loss: 0.43942
+Dataset: Cifar100, Epoch: [ 60|200], step: 200, loss: 0.37581
+Dataset: Cifar100, Epoch: [ 60|200], step: 300, loss: 0.49217
+Dataset: Cifar100, Epoch: [ 60|200], top1 Acc: [0.439500|0.45450], top5 Acc: [0.717300] early_stop_cnt: [21|50]
+Dataset: Cifar100, Epoch: [ 61|200], step: 0, loss: 0.38308
+Dataset: Cifar100, Epoch: [ 61|200], step: 100, loss: 0.49630
+Dataset: Cifar100, Epoch: [ 61|200], step: 200, loss: 0.27273
+Dataset: Cifar100, Epoch: [ 61|200], step: 300, loss: 0.32480
+Dataset: Cifar100, Epoch: [ 61|200], top1 Acc: [0.435200|0.45450], top5 Acc: [0.720900] early_stop_cnt: [22|50]
+Dataset: Cifar100, Epoch: [ 62|200], step: 0, loss: 0.29951
+Dataset: Cifar100, Epoch: [ 62|200], step: 100, loss: 0.20549
+Dataset: Cifar100, Epoch: [ 62|200], step: 200, loss: 0.33637
+Dataset: Cifar100, Epoch: [ 62|200], step: 300, loss: 0.31777
+Dataset: Cifar100, Epoch: [ 62|200], top1 Acc: [0.436200|0.45450], top5 Acc: [0.716400] early_stop_cnt: [23|50]
+Dataset: Cifar100, Epoch: [ 63|200], step: 0, loss: 0.34702
+Dataset: Cifar100, Epoch: [ 63|200], step: 100, loss: 0.32105
+Dataset: Cifar100, Epoch: [ 63|200], step: 200, loss: 0.29103
+Dataset: Cifar100, Epoch: [ 63|200], step: 300, loss: 0.44116
+Dataset: Cifar100, Epoch: [ 63|200], top1 Acc: [0.436700|0.45450], top5 Acc: [0.714800] early_stop_cnt: [24|50]
+Dataset: Cifar100, Epoch: [ 64|200], step: 0, loss: 0.36226
+Dataset: Cifar100, Epoch: [ 64|200], step: 100, loss: 0.34317
+Dataset: Cifar100, Epoch: [ 64|200], step: 200, loss: 0.40204
+Dataset: Cifar100, Epoch: [ 64|200], step: 300, loss: 0.33686
+Dataset: Cifar100, Epoch: [ 64|200], top1 Acc: [0.445200|0.45450], top5 Acc: [0.726600] early_stop_cnt: [25|50]
+Dataset: Cifar100, Epoch: [ 65|200], step: 0, loss: 0.26133
+Dataset: Cifar100, Epoch: [ 65|200], step: 100, loss: 0.41262
+Dataset: Cifar100, Epoch: [ 65|200], step: 200, loss: 0.36295
+Dataset: Cifar100, Epoch: [ 65|200], step: 300, loss: 0.26358
+Dataset: Cifar100, Epoch: [ 65|200], top1 Acc: [0.445600|0.45450], top5 Acc: [0.721800] early_stop_cnt: [26|50]
+Dataset: Cifar100, Epoch: [ 66|200], step: 0, loss: 0.31172
+Dataset: Cifar100, Epoch: [ 66|200], step: 100, loss: 0.27291
+Dataset: Cifar100, Epoch: [ 66|200], step: 200, loss: 0.28178
+Dataset: Cifar100, Epoch: [ 66|200], step: 300, loss: 0.28917
+Dataset: Cifar100, Epoch: [ 66|200], top1 Acc: [0.435900|0.45450], top5 Acc: [0.716600] early_stop_cnt: [27|50]
+Dataset: Cifar100, Epoch: [ 67|200], step: 0, loss: 0.25950
+Dataset: Cifar100, Epoch: [ 67|200], step: 100, loss: 0.32037
+Dataset: Cifar100, Epoch: [ 67|200], step: 200, loss: 0.34318
+Dataset: Cifar100, Epoch: [ 67|200], step: 300, loss: 0.33588
+Dataset: Cifar100, Epoch: [ 67|200], top1 Acc: [0.434700|0.45450], top5 Acc: [0.716200] early_stop_cnt: [28|50]
+Dataset: Cifar100, Epoch: [ 68|200], step: 0, loss: 0.21982
+Dataset: Cifar100, Epoch: [ 68|200], step: 100, loss: 0.26770
+Dataset: Cifar100, Epoch: [ 68|200], step: 200, loss: 0.28443
+Dataset: Cifar100, Epoch: [ 68|200], step: 300, loss: 0.28968
+Dataset: Cifar100, Epoch: [ 68|200], top1 Acc: [0.440600|0.45450], top5 Acc: [0.720000] early_stop_cnt: [29|50]
+Dataset: Cifar100, Epoch: [ 69|200], step: 0, loss: 0.29180
+Dataset: Cifar100, Epoch: [ 69|200], step: 100, loss: 0.21158
+Dataset: Cifar100, Epoch: [ 69|200], step: 200, loss: 0.30789
+Dataset: Cifar100, Epoch: [ 69|200], step: 300, loss: 0.20438
+Dataset: Cifar100, Epoch: [ 69|200], top1 Acc: [0.447000|0.45450], top5 Acc: [0.723800] early_stop_cnt: [30|50]
+Dataset: Cifar100, Epoch: [ 70|200], step: 0, loss: 0.22001
+Dataset: Cifar100, Epoch: [ 70|200], step: 100, loss: 0.23761
+Dataset: Cifar100, Epoch: [ 70|200], step: 200, loss: 0.24079
+Dataset: Cifar100, Epoch: [ 70|200], step: 300, loss: 0.31570
+Dataset: Cifar100, Epoch: [ 70|200], top1 Acc: [0.445100|0.45450], top5 Acc: [0.722200] early_stop_cnt: [31|50]
+Dataset: Cifar100, Epoch: [ 71|200], step: 0, loss: 0.16944
+Dataset: Cifar100, Epoch: [ 71|200], step: 100, loss: 0.34015
+Dataset: Cifar100, Epoch: [ 71|200], step: 200, loss: 0.28305
+Dataset: Cifar100, Epoch: [ 71|200], step: 300, loss: 0.21497
+Dataset: Cifar100, Epoch: [ 71|200], top1 Acc: [0.444500|0.45450], top5 Acc: [0.718700] early_stop_cnt: [32|50]
+Dataset: Cifar100, Epoch: [ 72|200], step: 0, loss: 0.17266
+Dataset: Cifar100, Epoch: [ 72|200], step: 100, loss: 0.41795
+Dataset: Cifar100, Epoch: [ 72|200], step: 200, loss: 0.15445
+Dataset: Cifar100, Epoch: [ 72|200], step: 300, loss: 0.19587
+Dataset: Cifar100, Epoch: [ 72|200], top1 Acc: [0.437800|0.45450], top5 Acc: [0.716400] early_stop_cnt: [33|50]
+Dataset: Cifar100, Epoch: [ 73|200], step: 0, loss: 0.16278
+Dataset: Cifar100, Epoch: [ 73|200], step: 100, loss: 0.23385
+Dataset: Cifar100, Epoch: [ 73|200], step: 200, loss: 0.17663
+Dataset: Cifar100, Epoch: [ 73|200], step: 300, loss: 0.18793
+Dataset: Cifar100, Epoch: [ 73|200], top1 Acc: [0.444700|0.45450], top5 Acc: [0.717900] early_stop_cnt: [34|50]
+Dataset: Cifar100, Epoch: [ 74|200], step: 0, loss: 0.24976
+Dataset: Cifar100, Epoch: [ 74|200], step: 100, loss: 0.17491
+Dataset: Cifar100, Epoch: [ 74|200], step: 200, loss: 0.17701
+Dataset: Cifar100, Epoch: [ 74|200], step: 300, loss: 0.22949
+Dataset: Cifar100, Epoch: [ 74|200], top1 Acc: [0.441400|0.45450], top5 Acc: [0.718400] early_stop_cnt: [35|50]
+Dataset: Cifar100, Epoch: [ 75|200], step: 0, loss: 0.14068
+Dataset: Cifar100, Epoch: [ 75|200], step: 100, loss: 0.14348
+Dataset: Cifar100, Epoch: [ 75|200], step: 200, loss: 0.22693
+Dataset: Cifar100, Epoch: [ 75|200], step: 300, loss: 0.22189
+Dataset: Cifar100, Epoch: [ 75|200], top1 Acc: [0.438900|0.45450], top5 Acc: [0.711200] early_stop_cnt: [36|50]
+Dataset: Cifar100, Epoch: [ 76|200], step: 0, loss: 0.27319
+Dataset: Cifar100, Epoch: [ 76|200], step: 100, loss: 0.16067
+Dataset: Cifar100, Epoch: [ 76|200], step: 200, loss: 0.15828
+Dataset: Cifar100, Epoch: [ 76|200], step: 300, loss: 0.20510
+Dataset: Cifar100, Epoch: [ 76|200], top1 Acc: [0.443800|0.45450], top5 Acc: [0.717000] early_stop_cnt: [37|50]
+Dataset: Cifar100, Epoch: [ 77|200], step: 0, loss: 0.12129
+Dataset: Cifar100, Epoch: [ 77|200], step: 100, loss: 0.26171
+Dataset: Cifar100, Epoch: [ 77|200], step: 200, loss: 0.26367
+Dataset: Cifar100, Epoch: [ 77|200], step: 300, loss: 0.18258
+Dataset: Cifar100, Epoch: [ 77|200], top1 Acc: [0.441600|0.45450], top5 Acc: [0.716800] early_stop_cnt: [38|50]
+Dataset: Cifar100, Epoch: [ 78|200], step: 0, loss: 0.15932
+Dataset: Cifar100, Epoch: [ 78|200], step: 100, loss: 0.20776
+Dataset: Cifar100, Epoch: [ 78|200], step: 200, loss: 0.18314
+Dataset: Cifar100, Epoch: [ 78|200], step: 300, loss: 0.28934
+Dataset: Cifar100, Epoch: [ 78|200], top1 Acc: [0.444700|0.45450], top5 Acc: [0.721900] early_stop_cnt: [39|50]
+Dataset: Cifar100, Epoch: [ 79|200], step: 0, loss: 0.09869
+Dataset: Cifar100, Epoch: [ 79|200], step: 100, loss: 0.21504
+Dataset: Cifar100, Epoch: [ 79|200], step: 200, loss: 0.16165
+Dataset: Cifar100, Epoch: [ 79|200], step: 300, loss: 0.18282
+Dataset: Cifar100, Epoch: [ 79|200], top1 Acc: [0.440700|0.45450], top5 Acc: [0.716600] early_stop_cnt: [40|50]
+Dataset: Cifar100, Epoch: [ 80|200], step: 0, loss: 0.22120
+Dataset: Cifar100, Epoch: [ 80|200], step: 100, loss: 0.16227
+Dataset: Cifar100, Epoch: [ 80|200], step: 200, loss: 0.35799
+Dataset: Cifar100, Epoch: [ 80|200], step: 300, loss: 0.21886
+Dataset: Cifar100, Epoch: [ 80|200], top1 Acc: [0.438600|0.45450], top5 Acc: [0.715000] early_stop_cnt: [41|50]
+Dataset: Cifar100, Epoch: [ 81|200], step: 0, loss: 0.17047
+Dataset: Cifar100, Epoch: [ 81|200], step: 100, loss: 0.14965
+Dataset: Cifar100, Epoch: [ 81|200], step: 200, loss: 0.22134
+Dataset: Cifar100, Epoch: [ 81|200], step: 300, loss: 0.20695
+Dataset: Cifar100, Epoch: [ 81|200], top1 Acc: [0.443500|0.45450], top5 Acc: [0.715100] early_stop_cnt: [42|50]
+Dataset: Cifar100, Epoch: [ 82|200], step: 0, loss: 0.12995
+Dataset: Cifar100, Epoch: [ 82|200], step: 100, loss: 0.17869
+Dataset: Cifar100, Epoch: [ 82|200], step: 200, loss: 0.10125
+Dataset: Cifar100, Epoch: [ 82|200], step: 300, loss: 0.15519
+Dataset: Cifar100, Epoch: [ 82|200], top1 Acc: [0.437100|0.45450], top5 Acc: [0.715800] early_stop_cnt: [43|50]
+Dataset: Cifar100, Epoch: [ 83|200], step: 0, loss: 0.21028
+Dataset: Cifar100, Epoch: [ 83|200], step: 100, loss: 0.16269
+Dataset: Cifar100, Epoch: [ 83|200], step: 200, loss: 0.29321
+Dataset: Cifar100, Epoch: [ 83|200], step: 300, loss: 0.18033
+Dataset: Cifar100, Epoch: [ 83|200], top1 Acc: [0.447200|0.45450], top5 Acc: [0.715900] early_stop_cnt: [44|50]
+Dataset: Cifar100, Epoch: [ 84|200], step: 0, loss: 0.16371
+Dataset: Cifar100, Epoch: [ 84|200], step: 100, loss: 0.11258
+Dataset: Cifar100, Epoch: [ 84|200], step: 200, loss: 0.19562
+Dataset: Cifar100, Epoch: [ 84|200], step: 300, loss: 0.11623
+Dataset: Cifar100, Epoch: [ 84|200], top1 Acc: [0.448000|0.45450], top5 Acc: [0.727200] early_stop_cnt: [45|50]
+Dataset: Cifar100, Epoch: [ 85|200], step: 0, loss: 0.05851
+Dataset: Cifar100, Epoch: [ 85|200], step: 100, loss: 0.07448
+Dataset: Cifar100, Epoch: [ 85|200], step: 200, loss: 0.19601
+Dataset: Cifar100, Epoch: [ 85|200], step: 300, loss: 0.13444
+Dataset: Cifar100, Epoch: [ 85|200], top1 Acc: [0.445300|0.45450], top5 Acc: [0.715300] early_stop_cnt: [46|50]
+Dataset: Cifar100, Epoch: [ 86|200], step: 0, loss: 0.15084
+Dataset: Cifar100, Epoch: [ 86|200], step: 100, loss: 0.10007
+Dataset: Cifar100, Epoch: [ 86|200], step: 200, loss: 0.11914
+Dataset: Cifar100, Epoch: [ 86|200], step: 300, loss: 0.10877
+Dataset: Cifar100, Epoch: [ 86|200], top1 Acc: [0.448400|0.45450], top5 Acc: [0.720800] early_stop_cnt: [47|50]
+Dataset: Cifar100, Epoch: [ 87|200], step: 0, loss: 0.06906
+Dataset: Cifar100, Epoch: [ 87|200], step: 100, loss: 0.11083
+Dataset: Cifar100, Epoch: [ 87|200], step: 200, loss: 0.30210
+Dataset: Cifar100, Epoch: [ 87|200], step: 300, loss: 0.16585
+Dataset: Cifar100, Epoch: [ 87|200], top1 Acc: [0.445300|0.45450], top5 Acc: [0.716100] early_stop_cnt: [48|50]
+Dataset: Cifar100, Epoch: [ 88|200], step: 0, loss: 0.15386
+Dataset: Cifar100, Epoch: [ 88|200], step: 100, loss: 0.13644
+Dataset: Cifar100, Epoch: [ 88|200], step: 200, loss: 0.22597
+Dataset: Cifar100, Epoch: [ 88|200], step: 300, loss: 0.12045
+Dataset: Cifar100, Epoch: [ 88|200], top1 Acc: [0.441100|0.45450], top5 Acc: [0.720000] early_stop_cnt: [49|50]
+Dataset: Cifar100, Epoch: [ 89|200], step: 0, loss: 0.11566
+Dataset: Cifar100, Epoch: [ 89|200], step: 100, loss: 0.14127
+Dataset: Cifar100, Epoch: [ 89|200], step: 200, loss: 0.10218
+Dataset: Cifar100, Epoch: [ 89|200], step: 300, loss: 0.16774
+Dataset: Cifar100, Epoch: [ 89|200], top1 Acc: [0.449600|0.45450], top5 Acc: [0.719600] early_stop_cnt: [50|50]
+och: [ 88|200], step: 100, loss: 0.13644
+Dataset: Cifar100, Epoch: [ 88|200], step: 200, loss: 0.22597
+Dataset: Cifar100, Epoch: [ 88|200], step: 300, loss: 0.12045
+[32mDataset: Cifar100, Epoch: [ 88|200], top1 Acc: [0.441100|0.45450], top5 Acc: [0.720000] early_stop_cnt: [49|50]
+Dataset: Cifar100, Epoch: [ 89|200], step: 0, loss: 0.11566
+Dataset: Cifar100, Epoch: [ 89|200], step: 100, loss: 0.14127
+Dataset: Cifar100, Epoch: [ 89|200], step: 200, loss: 0.10218
+Dataset: Cifar100, Epoch: [ 89|200], step: 300, loss: 0.16774
+[32mDataset: Cifar100, Epoch: [ 89|200], top1 Acc: [0.449600|0.45450], top5 Acc: [0.719600] early_stop_cnt: [50|50]
+[33mEarly Stopped at epoch: 89!

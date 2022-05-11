@@ -1,0 +1,263 @@
+Training curves can be found in runs/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51
+Save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Start Training+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Training Digest: Run command: /home/jack/miniconda3/envs/torch/bin/python /home/jack/projects/AlexNet/main.py -l -pm -ne 200 -es 50 -lls 100 -lce 10 -ds PascalVOC2012 
+AlexNetPaper training with modern setup
+lr: 0.0001
+e_poech: 200
+early_stop: 50
+datasets: PascalVOC2012
+Optim: Adam
+Dataset: PascalVOC2012, Epoch: [  0|200], step: 0, loss: 2.99596
+Dataset: PascalVOC2012, Epoch: [  0|200], new top1 Acc: 0.14288, top5 Acc:0.49304
+Dataset: PascalVOC2012, Epoch: [  0|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [  1|200], step: 0, loss: 2.78473
+Dataset: PascalVOC2012, Epoch: [  1|200], new top1 Acc: 0.17070, top5 Acc:0.55933
+Dataset: PascalVOC2012, Epoch: [  1|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [  2|200], step: 0, loss: 2.67700
+Dataset: PascalVOC2012, Epoch: [  2|200], new top1 Acc: 0.17585, top5 Acc:0.59694
+Dataset: PascalVOC2012, Epoch: [  2|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [  3|200], step: 0, loss: 2.49963
+Dataset: PascalVOC2012, Epoch: [  3|200], new top1 Acc: 0.17688, top5 Acc:0.61704
+Dataset: PascalVOC2012, Epoch: [  3|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [  4|200], step: 0, loss: 2.46397
+Dataset: PascalVOC2012, Epoch: [  4|200], new top1 Acc: 0.18925, top5 Acc:0.64726
+Dataset: PascalVOC2012, Epoch: [  4|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [  5|200], step: 0, loss: 2.46138
+Dataset: PascalVOC2012, Epoch: [  5|200], new top1 Acc: 0.19200, top5 Acc:0.65310
+Dataset: PascalVOC2012, Epoch: [  5|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [  6|200], step: 0, loss: 2.49724
+Dataset: PascalVOC2012, Epoch: [  6|200], new top1 Acc: 0.19234, top5 Acc:0.64795
+Dataset: PascalVOC2012, Epoch: [  6|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [  7|200], step: 0, loss: 2.41269
+Dataset: PascalVOC2012, Epoch: [  7|200], new top1 Acc: 0.22377, top5 Acc:0.68916
+Dataset: PascalVOC2012, Epoch: [  7|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [  8|200], step: 0, loss: 2.30238
+Dataset: PascalVOC2012, Epoch: [  8|200], new top1 Acc: 0.23527, top5 Acc:0.70599
+Dataset: PascalVOC2012, Epoch: [  8|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [  9|200], step: 0, loss: 2.43032
+Dataset: PascalVOC2012, Epoch: [  9|200], new top1 Acc: 0.23991, top5 Acc:0.70599
+Dataset: PascalVOC2012, Epoch: [  9|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 10|200], step: 0, loss: 2.30802
+Dataset: PascalVOC2012, Epoch: [ 10|200], top1 Acc: [0.214151|0.23991], top5 Acc: [0.692770] early_stop_cnt: [ 1|50]
+Dataset: PascalVOC2012, Epoch: [ 11|200], step: 0, loss: 2.31374
+Dataset: PascalVOC2012, Epoch: [ 11|200], new top1 Acc: 0.26876, top5 Acc:0.71630
+Dataset: PascalVOC2012, Epoch: [ 11|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 12|200], step: 0, loss: 2.13993
+Dataset: PascalVOC2012, Epoch: [ 12|200], top1 Acc: [0.266186|0.26876], top5 Acc: [0.705307] early_stop_cnt: [ 1|50]
+Dataset: PascalVOC2012, Epoch: [ 13|200], step: 0, loss: 2.24503
+Dataset: PascalVOC2012, Epoch: [ 13|200], top1 Acc: [0.262236|0.26876], top5 Acc: [0.717843] early_stop_cnt: [ 2|50]
+Dataset: PascalVOC2012, Epoch: [ 14|200], step: 0, loss: 2.34376
+Dataset: PascalVOC2012, Epoch: [ 14|200], new top1 Acc: 0.28645, top5 Acc:0.73725
+Dataset: PascalVOC2012, Epoch: [ 14|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 15|200], step: 0, loss: 2.06889
+Dataset: PascalVOC2012, Epoch: [ 15|200], new top1 Acc: 0.30603, top5 Acc:0.74669
+Dataset: PascalVOC2012, Epoch: [ 15|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 16|200], step: 0, loss: 2.16766
+Dataset: PascalVOC2012, Epoch: [ 16|200], top1 Acc: [0.287824|0.30603], top5 Acc: [0.734329] early_stop_cnt: [ 1|50]
+Dataset: PascalVOC2012, Epoch: [ 17|200], step: 0, loss: 2.20555
+Dataset: PascalVOC2012, Epoch: [ 17|200], new top1 Acc: 0.30929, top5 Acc:0.75391
+Dataset: PascalVOC2012, Epoch: [ 17|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 18|200], step: 0, loss: 1.95899
+Dataset: PascalVOC2012, Epoch: [ 18|200], top1 Acc: [0.285763|0.30929], top5 Acc: [0.747725] early_stop_cnt: [ 1|50]
+Dataset: PascalVOC2012, Epoch: [ 19|200], step: 0, loss: 1.83435
+Dataset: PascalVOC2012, Epoch: [ 19|200], top1 Acc: [0.300532|0.30929], top5 Acc: [0.754422] early_stop_cnt: [ 2|50]
+Dataset: PascalVOC2012, Epoch: [ 20|200], step: 0, loss: 1.93605
+Dataset: PascalVOC2012, Epoch: [ 20|200], new top1 Acc: 0.32440, top5 Acc:0.76799
+Dataset: PascalVOC2012, Epoch: [ 20|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 21|200], step: 0, loss: 2.19446
+Dataset: PascalVOC2012, Epoch: [ 21|200], top1 Acc: [0.317706|0.32440], top5 Acc: [0.763867] early_stop_cnt: [ 1|50]
+Dataset: PascalVOC2012, Epoch: [ 22|200], step: 0, loss: 1.91372
+Dataset: PascalVOC2012, Epoch: [ 22|200], new top1 Acc: 0.32475, top5 Acc:0.77589
+Dataset: PascalVOC2012, Epoch: [ 22|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 23|200], step: 0, loss: 2.04392
+Dataset: PascalVOC2012, Epoch: [ 23|200], new top1 Acc: 0.32526, top5 Acc:0.76919
+Dataset: PascalVOC2012, Epoch: [ 23|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 24|200], step: 0, loss: 1.85618
+Dataset: PascalVOC2012, Epoch: [ 24|200], new top1 Acc: 0.32784, top5 Acc:0.76765
+Dataset: PascalVOC2012, Epoch: [ 24|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 25|200], step: 0, loss: 1.91208
+Dataset: PascalVOC2012, Epoch: [ 25|200], new top1 Acc: 0.34106, top5 Acc:0.77709
+Dataset: PascalVOC2012, Epoch: [ 25|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 26|200], step: 0, loss: 1.80793
+Dataset: PascalVOC2012, Epoch: [ 26|200], top1 Acc: [0.322171|0.34106], top5 Acc: [0.767817] early_stop_cnt: [ 1|50]
+Dataset: PascalVOC2012, Epoch: [ 27|200], step: 0, loss: 2.02444
+Dataset: PascalVOC2012, Epoch: [ 27|200], top1 Acc: [0.340546|0.34106], top5 Acc: [0.772969] early_stop_cnt: [ 2|50]
+Dataset: PascalVOC2012, Epoch: [ 28|200], step: 0, loss: 1.89711
+Dataset: PascalVOC2012, Epoch: [ 28|200], new top1 Acc: 0.34913, top5 Acc:0.77932
+Dataset: PascalVOC2012, Epoch: [ 28|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 29|200], step: 0, loss: 1.83254
+Dataset: PascalVOC2012, Epoch: [ 29|200], new top1 Acc: 0.35600, top5 Acc:0.78413
+Dataset: PascalVOC2012, Epoch: [ 29|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 30|200], step: 0, loss: 1.76064
+Dataset: PascalVOC2012, Epoch: [ 30|200], top1 Acc: [0.342263|0.35600], top5 Acc: [0.782930] early_stop_cnt: [ 1|50]
+Dataset: PascalVOC2012, Epoch: [ 31|200], step: 0, loss: 1.81708
+Dataset: PascalVOC2012, Epoch: [ 31|200], new top1 Acc: 0.36253, top5 Acc:0.78894
+Dataset: PascalVOC2012, Epoch: [ 31|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 32|200], step: 0, loss: 1.80000
+Dataset: PascalVOC2012, Epoch: [ 32|200], top1 Acc: [0.356002|0.36253], top5 Acc: [0.792890] early_stop_cnt: [ 1|50]
+Dataset: PascalVOC2012, Epoch: [ 33|200], step: 0, loss: 1.75978
+Dataset: PascalVOC2012, Epoch: [ 33|200], new top1 Acc: 0.36785, top5 Acc:0.79375
+Dataset: PascalVOC2012, Epoch: [ 33|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 34|200], step: 0, loss: 1.72132
+Dataset: PascalVOC2012, Epoch: [ 34|200], new top1 Acc: 0.36991, top5 Acc:0.79736
+Dataset: PascalVOC2012, Epoch: [ 34|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 35|200], step: 0, loss: 1.77834
+Dataset: PascalVOC2012, Epoch: [ 35|200], new top1 Acc: 0.37713, top5 Acc:0.79821
+Dataset: PascalVOC2012, Epoch: [ 35|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 36|200], step: 0, loss: 1.59271
+Dataset: PascalVOC2012, Epoch: [ 36|200], top1 Acc: [0.351709|0.37713], top5 Acc: [0.796497] early_stop_cnt: [ 1|50]
+Dataset: PascalVOC2012, Epoch: [ 37|200], step: 0, loss: 1.81206
+Dataset: PascalVOC2012, Epoch: [ 37|200], top1 Acc: [0.363730|0.37713], top5 Acc: [0.792890] early_stop_cnt: [ 2|50]
+Dataset: PascalVOC2012, Epoch: [ 38|200], step: 0, loss: 1.46129
+Dataset: PascalVOC2012, Epoch: [ 38|200], new top1 Acc: 0.37833, top5 Acc:0.79770
+Dataset: PascalVOC2012, Epoch: [ 38|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 39|200], step: 0, loss: 1.64633
+Dataset: PascalVOC2012, Epoch: [ 39|200], new top1 Acc: 0.38159, top5 Acc:0.80474
+Dataset: PascalVOC2012, Epoch: [ 39|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 40|200], step: 0, loss: 1.60721
+Dataset: PascalVOC2012, Epoch: [ 40|200], new top1 Acc: 0.38794, top5 Acc:0.80560
+Dataset: PascalVOC2012, Epoch: [ 40|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 41|200], step: 0, loss: 1.55145
+Dataset: PascalVOC2012, Epoch: [ 41|200], top1 Acc: [0.380045|0.38794], top5 Acc: [0.799244] early_stop_cnt: [ 1|50]
+Dataset: PascalVOC2012, Epoch: [ 42|200], step: 0, loss: 1.38777
+Dataset: PascalVOC2012, Epoch: [ 42|200], top1 Acc: [0.383136|0.38794], top5 Acc: [0.797527] early_stop_cnt: [ 2|50]
+Dataset: PascalVOC2012, Epoch: [ 43|200], step: 0, loss: 1.48340
+Dataset: PascalVOC2012, Epoch: [ 43|200], top1 Acc: [0.385884|0.38794], top5 Acc: [0.809548] early_stop_cnt: [ 3|50]
+Dataset: PascalVOC2012, Epoch: [ 44|200], step: 0, loss: 1.52868
+Dataset: PascalVOC2012, Epoch: [ 44|200], top1 Acc: [0.376782|0.38794], top5 Acc: [0.799760] early_stop_cnt: [ 4|50]
+Dataset: PascalVOC2012, Epoch: [ 45|200], step: 0, loss: 1.60089
+Dataset: PascalVOC2012, Epoch: [ 45|200], top1 Acc: [0.370428|0.38794], top5 Acc: [0.797012] early_stop_cnt: [ 5|50]
+Dataset: PascalVOC2012, Epoch: [ 46|200], step: 0, loss: 1.58146
+Dataset: PascalVOC2012, Epoch: [ 46|200], top1 Acc: [0.384166|0.38794], top5 Acc: [0.795810] early_stop_cnt: [ 6|50]
+Dataset: PascalVOC2012, Epoch: [ 47|200], step: 0, loss: 1.63886
+Dataset: PascalVOC2012, Epoch: [ 47|200], new top1 Acc: 0.39138, top5 Acc:0.80319
+Dataset: PascalVOC2012, Epoch: [ 47|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 48|200], step: 0, loss: 1.26213
+Dataset: PascalVOC2012, Epoch: [ 48|200], top1 Acc: [0.377984|0.39138], top5 Acc: [0.793921] early_stop_cnt: [ 1|50]
+Dataset: PascalVOC2012, Epoch: [ 49|200], step: 0, loss: 1.16952
+Dataset: PascalVOC2012, Epoch: [ 49|200], new top1 Acc: 0.39138, top5 Acc:0.80577
+Dataset: PascalVOC2012, Epoch: [ 49|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 50|200], step: 0, loss: 1.49326
+Dataset: PascalVOC2012, Epoch: [ 50|200], new top1 Acc: 0.39310, top5 Acc:0.80371
+Dataset: PascalVOC2012, Epoch: [ 50|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 51|200], step: 0, loss: 1.37423
+Dataset: PascalVOC2012, Epoch: [ 51|200], top1 Acc: [0.385025|0.39310], top5 Acc: [0.800275] early_stop_cnt: [ 1|50]
+Dataset: PascalVOC2012, Epoch: [ 52|200], step: 0, loss: 1.34168
+Dataset: PascalVOC2012, Epoch: [ 52|200], top1 Acc: [0.378327|0.39310], top5 Acc: [0.798901] early_stop_cnt: [ 2|50]
+Dataset: PascalVOC2012, Epoch: [ 53|200], step: 0, loss: 1.49401
+Dataset: PascalVOC2012, Epoch: [ 53|200], top1 Acc: [0.375751|0.39310], top5 Acc: [0.796668] early_stop_cnt: [ 3|50]
+Dataset: PascalVOC2012, Epoch: [ 54|200], step: 0, loss: 1.44238
+Dataset: PascalVOC2012, Epoch: [ 54|200], top1 Acc: [0.381590|0.39310], top5 Acc: [0.795123] early_stop_cnt: [ 4|50]
+Dataset: PascalVOC2012, Epoch: [ 55|200], step: 0, loss: 1.26294
+Dataset: PascalVOC2012, Epoch: [ 55|200], new top1 Acc: 0.40529, top5 Acc:0.80835
+Dataset: PascalVOC2012, Epoch: [ 55|200], save checkpoint to checkpoints/PascalVOC2012/AlexNetPaper/2022-05-11 17-47-51/best.pt
+Dataset: PascalVOC2012, Epoch: [ 56|200], step: 0, loss: 1.17205
+Dataset: PascalVOC2012, Epoch: [ 56|200], top1 Acc: [0.385025|0.40529], top5 Acc: [0.787567] early_stop_cnt: [ 1|50]
+Dataset: PascalVOC2012, Epoch: [ 57|200], step: 0, loss: 1.18098
+Dataset: PascalVOC2012, Epoch: [ 57|200], top1 Acc: [0.383823|0.40529], top5 Acc: [0.798386] early_stop_cnt: [ 2|50]
+Dataset: PascalVOC2012, Epoch: [ 58|200], step: 0, loss: 1.10851
+Dataset: PascalVOC2012, Epoch: [ 58|200], top1 Acc: [0.386914|0.40529], top5 Acc: [0.796668] early_stop_cnt: [ 3|50]
+Dataset: PascalVOC2012, Epoch: [ 59|200], step: 0, loss: 1.21872
+Dataset: PascalVOC2012, Epoch: [ 59|200], top1 Acc: [0.380216|0.40529], top5 Acc: [0.790658] early_stop_cnt: [ 4|50]
+Dataset: PascalVOC2012, Epoch: [ 60|200], step: 0, loss: 1.13166
+Dataset: PascalVOC2012, Epoch: [ 60|200], top1 Acc: [0.395672|0.40529], top5 Acc: [0.802507] early_stop_cnt: [ 5|50]
+Dataset: PascalVOC2012, Epoch: [ 61|200], step: 0, loss: 1.11455
+Dataset: PascalVOC2012, Epoch: [ 61|200], top1 Acc: [0.385540|0.40529], top5 Acc: [0.791516] early_stop_cnt: [ 6|50]
+Dataset: PascalVOC2012, Epoch: [ 62|200], step: 0, loss: 0.98063
+Dataset: PascalVOC2012, Epoch: [ 62|200], top1 Acc: [0.401855|0.40529], top5 Acc: [0.795123] early_stop_cnt: [ 7|50]
+Dataset: PascalVOC2012, Epoch: [ 63|200], step: 0, loss: 1.12033
+Dataset: PascalVOC2012, Epoch: [ 63|200], top1 Acc: [0.393268|0.40529], top5 Acc: [0.793577] early_stop_cnt: [ 8|50]
+Dataset: PascalVOC2012, Epoch: [ 64|200], step: 0, loss: 1.08763
+Dataset: PascalVOC2012, Epoch: [ 64|200], top1 Acc: [0.398420|0.40529], top5 Acc: [0.797527] early_stop_cnt: [ 9|50]
+Dataset: PascalVOC2012, Epoch: [ 65|200], step: 0, loss: 0.99656
+Dataset: PascalVOC2012, Epoch: [ 65|200], top1 Acc: [0.376267|0.40529], top5 Acc: [0.784991] early_stop_cnt: [10|50]
+Dataset: PascalVOC2012, Epoch: [ 66|200], step: 0, loss: 1.02235
+Dataset: PascalVOC2012, Epoch: [ 66|200], top1 Acc: [0.385025|0.40529], top5 Acc: [0.788253] early_stop_cnt: [11|50]
+Dataset: PascalVOC2012, Epoch: [ 67|200], step: 0, loss: 1.05302
+Dataset: PascalVOC2012, Epoch: [ 67|200], top1 Acc: [0.386227|0.40529], top5 Acc: [0.798557] early_stop_cnt: [12|50]
+Dataset: PascalVOC2012, Epoch: [ 68|200], step: 0, loss: 0.97791
+Dataset: PascalVOC2012, Epoch: [ 68|200], top1 Acc: [0.382277|0.40529], top5 Acc: [0.793234] early_stop_cnt: [13|50]
+Dataset: PascalVOC2012, Epoch: [ 69|200], step: 0, loss: 0.87571
+Dataset: PascalVOC2012, Epoch: [ 69|200], top1 Acc: [0.382105|0.40529], top5 Acc: [0.791516] early_stop_cnt: [14|50]
+Dataset: PascalVOC2012, Epoch: [ 70|200], step: 0, loss: 0.85827
+Dataset: PascalVOC2012, Epoch: [ 70|200], top1 Acc: [0.379014|0.40529], top5 Acc: [0.790486] early_stop_cnt: [15|50]
+Dataset: PascalVOC2012, Epoch: [ 71|200], step: 0, loss: 0.90482
+Dataset: PascalVOC2012, Epoch: [ 71|200], top1 Acc: [0.378843|0.40529], top5 Acc: [0.788425] early_stop_cnt: [16|50]
+Dataset: PascalVOC2012, Epoch: [ 72|200], step: 0, loss: 0.85226
+Dataset: PascalVOC2012, Epoch: [ 72|200], top1 Acc: [0.378843|0.40529], top5 Acc: [0.782243] early_stop_cnt: [17|50]
+Dataset: PascalVOC2012, Epoch: [ 73|200], step: 0, loss: 0.72261
+Dataset: PascalVOC2012, Epoch: [ 73|200], top1 Acc: [0.400481|0.40529], top5 Acc: [0.800618] early_stop_cnt: [18|50]
+Dataset: PascalVOC2012, Epoch: [ 74|200], step: 0, loss: 0.74774
+Dataset: PascalVOC2012, Epoch: [ 74|200], top1 Acc: [0.371801|0.40529], top5 Acc: [0.782243] early_stop_cnt: [19|50]
+Dataset: PascalVOC2012, Epoch: [ 75|200], step: 0, loss: 0.92357
+Dataset: PascalVOC2012, Epoch: [ 75|200], top1 Acc: [0.367165|0.40529], top5 Acc: [0.779323] early_stop_cnt: [20|50]
+Dataset: PascalVOC2012, Epoch: [ 76|200], step: 0, loss: 0.64565
+Dataset: PascalVOC2012, Epoch: [ 76|200], top1 Acc: [0.378499|0.40529], top5 Acc: [0.779323] early_stop_cnt: [21|50]
+Dataset: PascalVOC2012, Epoch: [ 77|200], step: 0, loss: 0.89878
+Dataset: PascalVOC2012, Epoch: [ 77|200], top1 Acc: [0.362184|0.40529], top5 Acc: [0.776576] early_stop_cnt: [22|50]
+Dataset: PascalVOC2012, Epoch: [ 78|200], step: 0, loss: 0.78119
+Dataset: PascalVOC2012, Epoch: [ 78|200], top1 Acc: [0.374377|0.40529], top5 Acc: [0.777778] early_stop_cnt: [23|50]
+Dataset: PascalVOC2012, Epoch: [ 79|200], step: 0, loss: 0.58568
+Dataset: PascalVOC2012, Epoch: [ 79|200], top1 Acc: [0.383651|0.40529], top5 Acc: [0.780010] early_stop_cnt: [24|50]
+Dataset: PascalVOC2012, Epoch: [ 80|200], step: 0, loss: 0.64703
+Dataset: PascalVOC2012, Epoch: [ 80|200], top1 Acc: [0.368882|0.40529], top5 Acc: [0.777091] early_stop_cnt: [25|50]
+Dataset: PascalVOC2012, Epoch: [ 81|200], step: 0, loss: 0.63395
+Dataset: PascalVOC2012, Epoch: [ 81|200], top1 Acc: [0.373691|0.40529], top5 Acc: [0.771424] early_stop_cnt: [26|50]
+Dataset: PascalVOC2012, Epoch: [ 82|200], step: 0, loss: 0.65971
+Dataset: PascalVOC2012, Epoch: [ 82|200], top1 Acc: [0.376438|0.40529], top5 Acc: [0.779495] early_stop_cnt: [27|50]
+Dataset: PascalVOC2012, Epoch: [ 83|200], step: 0, loss: 0.64557
+Dataset: PascalVOC2012, Epoch: [ 83|200], top1 Acc: [0.375064|0.40529], top5 Acc: [0.782930] early_stop_cnt: [28|50]
+Dataset: PascalVOC2012, Epoch: [ 84|200], step: 0, loss: 0.52245
+Dataset: PascalVOC2012, Epoch: [ 84|200], top1 Acc: [0.373175|0.40529], top5 Acc: [0.778465] early_stop_cnt: [29|50]
+Dataset: PascalVOC2012, Epoch: [ 85|200], step: 0, loss: 0.49374
+Dataset: PascalVOC2012, Epoch: [ 85|200], top1 Acc: [0.355315|0.40529], top5 Acc: [0.765241] early_stop_cnt: [30|50]
+Dataset: PascalVOC2012, Epoch: [ 86|200], step: 0, loss: 0.67496
+Dataset: PascalVOC2012, Epoch: [ 86|200], top1 Acc: [0.369054|0.40529], top5 Acc: [0.775202] early_stop_cnt: [31|50]
+Dataset: PascalVOC2012, Epoch: [ 87|200], step: 0, loss: 0.59833
+Dataset: PascalVOC2012, Epoch: [ 87|200], top1 Acc: [0.375751|0.40529], top5 Acc: [0.777091] early_stop_cnt: [32|50]
+Dataset: PascalVOC2012, Epoch: [ 88|200], step: 0, loss: 0.57123
+Dataset: PascalVOC2012, Epoch: [ 88|200], top1 Acc: [0.373691|0.40529], top5 Acc: [0.775030] early_stop_cnt: [33|50]
+Dataset: PascalVOC2012, Epoch: [ 89|200], step: 0, loss: 0.56428
+Dataset: PascalVOC2012, Epoch: [ 89|200], top1 Acc: [0.376438|0.40529], top5 Acc: [0.769019] early_stop_cnt: [34|50]
+Dataset: PascalVOC2012, Epoch: [ 90|200], step: 0, loss: 0.57010
+Dataset: PascalVOC2012, Epoch: [ 90|200], top1 Acc: [0.365963|0.40529], top5 Acc: [0.768332] early_stop_cnt: [35|50]
+Dataset: PascalVOC2012, Epoch: [ 91|200], step: 0, loss: 0.60631
+Dataset: PascalVOC2012, Epoch: [ 91|200], top1 Acc: [0.359780|0.40529], top5 Acc: [0.770393] early_stop_cnt: [36|50]
+Dataset: PascalVOC2012, Epoch: [ 92|200], step: 0, loss: 0.46272
+Dataset: PascalVOC2012, Epoch: [ 92|200], top1 Acc: [0.380388|0.40529], top5 Acc: [0.777091] early_stop_cnt: [37|50]
+Dataset: PascalVOC2012, Epoch: [ 93|200], step: 0, loss: 0.36336
+Dataset: PascalVOC2012, Epoch: [ 93|200], top1 Acc: [0.364589|0.40529], top5 Acc: [0.764898] early_stop_cnt: [38|50]
+Dataset: PascalVOC2012, Epoch: [ 94|200], step: 0, loss: 0.59808
+Dataset: PascalVOC2012, Epoch: [ 94|200], top1 Acc: [0.374206|0.40529], top5 Acc: [0.765585] early_stop_cnt: [39|50]
+Dataset: PascalVOC2012, Epoch: [ 95|200], step: 0, loss: 0.39851
+Dataset: PascalVOC2012, Epoch: [ 95|200], top1 Acc: [0.376782|0.40529], top5 Acc: [0.774858] early_stop_cnt: [40|50]
+Dataset: PascalVOC2012, Epoch: [ 96|200], step: 0, loss: 0.37281
+Dataset: PascalVOC2012, Epoch: [ 96|200], top1 Acc: [0.369054|0.40529], top5 Acc: [0.771080] early_stop_cnt: [41|50]
+Dataset: PascalVOC2012, Epoch: [ 97|200], step: 0, loss: 0.34873
+Dataset: PascalVOC2012, Epoch: [ 97|200], top1 Acc: [0.367336|0.40529], top5 Acc: [0.763867] early_stop_cnt: [42|50]
+Dataset: PascalVOC2012, Epoch: [ 98|200], step: 0, loss: 0.32426
+Dataset: PascalVOC2012, Epoch: [ 98|200], top1 Acc: [0.364074|0.40529], top5 Acc: [0.762494] early_stop_cnt: [43|50]
+Dataset: PascalVOC2012, Epoch: [ 99|200], step: 0, loss: 0.47835
+Dataset: PascalVOC2012, Epoch: [ 99|200], top1 Acc: [0.375236|0.40529], top5 Acc: [0.776060] early_stop_cnt: [44|50]
+Dataset: PascalVOC2012, Epoch: [100|200], step: 0, loss: 0.35651
+Dataset: PascalVOC2012, Epoch: [100|200], top1 Acc: [0.370428|0.40529], top5 Acc: [0.767989] early_stop_cnt: [45|50]
+Dataset: PascalVOC2012, Epoch: [101|200], step: 0, loss: 0.35528
+Dataset: PascalVOC2012, Epoch: [101|200], top1 Acc: [0.377640|0.40529], top5 Acc: [0.766272] early_stop_cnt: [46|50]
+Dataset: PascalVOC2012, Epoch: [102|200], step: 0, loss: 0.30645
+Dataset: PascalVOC2012, Epoch: [102|200], top1 Acc: [0.370256|0.40529], top5 Acc: [0.762837] early_stop_cnt: [47|50]
+Dataset: PascalVOC2012, Epoch: [103|200], step: 0, loss: 0.45077
+Dataset: PascalVOC2012, Epoch: [103|200], top1 Acc: [0.379014|0.40529], top5 Acc: [0.771595] early_stop_cnt: [48|50]
+Dataset: PascalVOC2012, Epoch: [104|200], step: 0, loss: 0.25637
+Dataset: PascalVOC2012, Epoch: [104|200], top1 Acc: [0.374893|0.40529], top5 Acc: [0.772969] early_stop_cnt: [49|50]
+Dataset: PascalVOC2012, Epoch: [105|200], step: 0, loss: 0.39655
+Dataset: PascalVOC2012, Epoch: [105|200], top1 Acc: [0.368195|0.40529], top5 Acc: [0.769019] early_stop_cnt: [50|50]
+ PascalVOC2012, Epoch: [102|200], step: 0, loss: 0.30645
+[32mDataset: PascalVOC2012, Epoch: [102|200], top1 Acc: [0.370256|0.40529], top5 Acc: [0.762837] early_stop_cnt: [47|50]
+Dataset: PascalVOC2012, Epoch: [103|200], step: 0, loss: 0.45077
+[32mDataset: PascalVOC2012, Epoch: [103|200], top1 Acc: [0.379014|0.40529], top5 Acc: [0.771595] early_stop_cnt: [48|50]
+Dataset: PascalVOC2012, Epoch: [104|200], step: 0, loss: 0.25637
+[32mDataset: PascalVOC2012, Epoch: [104|200], top1 Acc: [0.374893|0.40529], top5 Acc: [0.772969] early_stop_cnt: [49|50]
+Dataset: PascalVOC2012, Epoch: [105|200], step: 0, loss: 0.39655
+[32mDataset: PascalVOC2012, Epoch: [105|200], top1 Acc: [0.368195|0.40529], top5 Acc: [0.769019] early_stop_cnt: [50|50]
+[33mEarly Stopped at epoch: 105!
