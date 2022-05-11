@@ -1,120 +1,159 @@
-# AlexNet
-Pytorch implementation of AlexNet.
+# ImageNet Classification with Deep Convolutional Neural Networks Pytorch Implementation
+
+This repository is `ImageNet Classification with Deep Convolutional Neural Networks` Pytorch third-party implementation of AlexNet.
+
+PDF: https://papers.nips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf
+
+NIPS Open Proceedings: https://papers.nips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html
+
+The original implementation of Alex Krizhevsky is not open sources, but many other third-party implementation is available, including Pytorch official implementation: https://pytorch.org/hub/pytorch_vision_alexnet/
+
+Notes:
+
+- Compared to architecture detailed in the paper, Pytorch implementation makes modifications, including: removing `Local Response Normalization`, changing input/output channel of convolutional layer, and etc.. For better re-implement the paper, I write AlexNet of both paper version and Pytorch Version.
+- I trained AlexNet on `Cifar10`, `Cifar100`, and `PascalVOC2012`. Due to the computation limitation, I didn't train on larger datasets like `ImageNet`.
+- Since images in `Cifar10` and `Cifa100` are pretty tiny (32 \* 32 \* 3), using 11 \* 11 kernel in the first convolutional layer will simply crash the network. There're two ways to address the problem:
+
+  1. Modify the first layer kernel size
+  2. Resize the image from 32 to 224 before put into the network
+
+  I have tested both, and find the first way runs fast and achieves higher accuracy. So, I also write a `CifarAlexNet` which shifts the kernel size of the first convolution layers.
+- Training `PascalVOC2012` takes too much time since my poor GPU cannot support. I roughly run the `PascalVOC2012` about 100~200 epochs, and finding the accuracy can be further promoted to meet the result claimed in the paper.
+- Current version is V2 where I basically rewrite all the code, so, you can only pull the v2 branch and run the codes.
+
+## Findings
+
+1. **Using higher learning rate at start and decease the learning rate during the training when the accuracy meets plateau is helpful.** In my experiments, compared with training with Adam/SGD as normal, **I find setting large learning rate at beginning do helps speed up training every times.** It may start with a much lower accuracy, but quickly meets with normal Adam/SGD. **However, not every time the final maximum accuracy is higher than normal setup**.
+2. For `Cifar10` and `Cifar100`, shift the kernel of the first convolutional layer is much better than resize the image from 32 \* 32 to 224 \* 224. It runs faster and achieve more accuracy. It not hard to understand the speed acceleration. But for the accuracy improvement, **I guess duplicating the pixels may cause the model learns useless patterns, which means noise is introduced when upsampling**.
+3. `Local Response Normalize` is useless. Without the LRN, the model can achieve higher accuracy.
+4. `PascalVOC2012` is harder than `Cifar100` and `Cifar10`. And `Cifar100` is harder than `Cifar10`. Since training with same epoch, Pascal's accuracy is lower than Cifar100's and Cifar10's. **I guess this may because down-sampling process of `Cifar10` and `Cifar100` lost many detail pattern while keep the main pattern that is critical for classification. I didn't test the hypothesis with downscaling PascalVOC2012's images.**
+5. Large learning rate is especially helpful when training on `large` datasets like `PascalVOC2012`.
+
+## Runs
+
+1. **Prepare the data**
+
+   To prepare the data, make soft link or directly put your data in the `dataset` folder
+
+   ```shell
+   cd ~/projects/AlexNet
+   mkdir dataset
+   cd dataset
+   # make soft link to the dataset or directly put your dataset in the folder
+   ln -s /media/jack/JackCode1/dataset/cifar-10/cifar-10-batches-py/ cifar-100
+   ln -s /media/jack/JackCode1/dataset/cifar-100/cifar-100-python/ cifar-100
+   ln -s /media/jack/JackCode1/dataset/pascalvoc2012/VOCdevkit/VOC2012/ PascalVOC2012
+   ```
+
+   Notes: the name of the datasets must be `cifar-10`, `cifar-100`, `PascalVOC2012`
+
+   After this, the directory should be like
+
+   ```shell
+   tree dataset -L 2 -l
+   ```
 
+   ```shell
+   dataset
+   ├── cifar-10 -> /media/jack/JackCode1/dataset/cifar-10/cifar-10-batches-py/
+   │   ├── batches.meta
+   │   ├── data_batch_1
+   │   ├── data_batch_2
+   │   ├── data_batch_3
+   │   ├── data_batch_4
+   │   ├── data_batch_5
+   │   ├── readme.html
+   │   └── test_batch
+   ├── cifar-100 -> /media/jack/JackCode1/dataset/cifar-100/cifar-100-python/
+   │   ├── cifar-100-python
+   │   ├── cifar-100-python.tar.gz
+   │   ├── file.txt~
+   │   ├── meta
+   │   ├── test
+   │   └── train
+   └── PascalVOC2012 -> /media/jack/JackCode1/dataset/pascalvoc2012/VOCdevkit/VOC2012/
+       ├── Annotations
+       ├── ImageSets
+       ├── JPEGImages
+       ├── SegmentationClass
+       └── SegmentationObject
 
+   9 directories, 13 files
+   ```
+2. run `main.py` with command line arguments
 
+   First, you can view all argument by offering `-h/--help` option
 
+   ```shell
+   python main.py -h
+   ```
 
-## 1. Results
+   and you will see
 
+   ```output
+   usage: main.py [-h] [-v] [-d] [-l] [-c] [-pt] [-pm] [-ne N_EPOCH] [-es EARLY_STOP] [-lls LOG_LOSS_STEP]
+                  [-lce LOG_CONFUSION_EPOCH] [-ds DATASET] [-m MESSAGE]
 
+   AlexNet Pytorch Implementation training util by Shihong Wang (Jack3Shihong@gmail.com)
 
-### 1. Cifar10/Cifar100
+   optional arguments:
+     -h, --help            show this help message and exit
+     -v, --version         show program's version number and exit
+     -d, --dry_run         If run without saving tensorboard amd network params to runs and checkpoints
+     -l, --log             If save terminal output to log
+     -c, --cifar           If use cifar modified network
+     -pt, --paper_train    If train the network using paper setting
+     -pm, --paper_model    If train the network exactly the same in paper
+     -ne N_EPOCH, --n_epoch N_EPOCH
+                           Set maximum training epoch of each task
+     -es EARLY_STOP, --early_stop EARLY_STOP
+                           Set maximum early stop epoch counts
+     -lls LOG_LOSS_STEP, --log_loss_step LOG_LOSS_STEP
+                           Set log loss steps
+     -lce LOG_CONFUSION_EPOCH, --log_confusion_epoch LOG_CONFUSION_EPOCH
+                           Set log confusion matrix epochs
+     -ds DATASET, --dataset DATASET
+                           Set training datasets
+     -m MESSAGE, --message MESSAGE
+                           Training digest
+   ```
 
-Note, each image in Cifar10/Cifar100 is an image of size `3*32*32`, which is too small for AlexNet who owns 11*11 convolution kernel to forward pass. So, I modify the size of the first two large filter in the paper to `5*5`. I hope this won't add too much bias.
+   Notes: currently, I didn't find a good solution to print long column tables in terminal which may also crash the log file, so the `-lce` option is currently aborted.
 
+   Following are some training examples.
 
+   ```shell
+   python main.py -l -c -ds "Cifar10" -m "Train cifar modified model on Cifar10 datasets with mordern setups (e.g., Adam optimizer, early stop, etc.), save training curves and log terminal output"
+   python main.py -l -d -c -ds "Cifar100" -m "Same as the former one, but train with Cifar100 and log results only (will not save checkpoints and training curves)"
+   python main.py -d -ds "PascalVOC2012" -pm -pt "Exactly same model and training setup in paper (with LRN, learning rate decay, SGD optimizer...)"
+   ```
+3. check the results in `log` and `runs` folder
 
-For the results, 3 parallel experiments are carried out for Cifar10 and Cifar100 respectively:
+   check `logs` for terminal outputs.
 
-- Original training setting, learning rate is set to `1e-2` initially, and is decided by 10 when the network stops training (i.e., does not increase for several epochs).
-- Training with learning rate of `1e-3` in the whole training.
-- Training with learning rate of `1e-4` in the whole training. Note, Cifar100 do not carry this experiments for `1e-3` is too worse.
+   run following command to see training curves
 
+   ```shell
+   tensorboard --logdir runs
+   ```
 
+## Results
 
-You can also see the result by running:
+You can check with previous commands, here I just put basic information of my training results without in-depth analysis. All training setups are in `log`
 
-```shell
-git clone https://github.com/jackwang0108/AlexNet.git
-cd AlexNet
-tensorboard --logdir ./runs
-```
+Helpful regular expressions are:
 
+* check results of top `k` results on different datasets: `PascalVOC2012\/.*\/.*topk`
+* check results of max top 1 results of datasets: `Cifar10\/.*\/.*max`
 
+**Results on Cifar10**
 
-**All the accuracy here is top-1 accuracy**.
+![Cifar10 Training Results](https://jack-1307599355.cos.ap-shanghai.myqcloud.com/image-20220512003756815.png)
 
-#### 1. Setting 1
+**Results on Cifar100**
 
-- Cifar10: 
+![Cifar100 Training Results](https://jack-1307599355.cos.ap-shanghai.myqcloud.com/image-20220512003858888.png)
 
-  - best validation accuracy: **78.7%**
+**Results on PascalVOC2012**
 
-  - best testing accuracy: **78.7%**
-
-  - training accuracy:
-
-    ![training accuracy of cifar10](https://jack-1307599355.cos.ap-shanghai.myqcloud.com/image-20220322171020190.png)
-
-  - training loss:
-
-    ![training loss of cifar10](https://jack-1307599355.cos.ap-shanghai.myqcloud.com/image-20220322171105095.png)
-
-- Cifar100:
-
-  - best validation accuracy: **41.3%**
-
-  - best test accuracy: **42.5%**
-
-  - training accuracy:
-
-    ![training accuracy of cifar100](https://jack-1307599355.cos.ap-shanghai.myqcloud.com/image-20220322171436218.png)
-
-  - training loss:
-
-    ![training loss of cifar100](https://jack-1307599355.cos.ap-shanghai.myqcloud.com/image-20220322171505204.png)
-
-
-
-
-
-#### 2. Setting 2
-
-- Cifar10: 
-
-  - best validation accuracy: **75.2%**
-
-  - best testing accuracy: **75.4%**
-
-  - training accuracy:
-
-    ![training accuracy of cifar10](https://jack-1307599355.cos.ap-shanghai.myqcloud.com/image-20220322171816964.png)
-
-  - training loss:
-
-    ![training loss of cifar10](https://jack-1307599355.cos.ap-shanghai.myqcloud.com/image-20220322172058077.png)
-
-- Cifar100:
-
-  - best validation accuracy: **35.4%**
-
-  - best test accuracy: **35.7%**
-
-  - training accuracy:
-
-    ![training accuracy of cifar100](https://jack-1307599355.cos.ap-shanghai.myqcloud.com/image-20220322172151100.png)
-
-  - training loss:
-
-    ![training loss of cifar100](https://jack-1307599355.cos.ap-shanghai.myqcloud.com/image-20220322172414732.png)
-
-
-
-
-
-#### 3. Setting 3
-
-- Cifar 10
-
-  - best validation accuracy: **78.6%**
-
-  - best testing accuracy: **79.6%**
-
-  - training accuracy:
-
-    ![training accuracy of cifar10](https://jack-1307599355.cos.ap-shanghai.myqcloud.com/image-20220322172630487.png)
-
-  - training loss:
-
-    ![training loss of cifar10](https://jack-1307599355.cos.ap-shanghai.myqcloud.com/image-20220322172656352.png)
+![PascalVOC2012 Training Results](https://jack-1307599355.cos.ap-shanghai.myqcloud.com/image-20220512004017064.png)
